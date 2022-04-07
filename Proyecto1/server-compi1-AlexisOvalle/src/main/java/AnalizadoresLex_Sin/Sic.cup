@@ -1,0 +1,558 @@
+    package com.cunoc.JFlex_Cup.Java;
+import java_cup.runtime.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.cunoc.Server.Console;
+import Frontend.ServerGui;
+import Objects.ListType;
+import Objects.Method;
+import Objects.Variable;
+import Objects.ClassSyntax;
+    
+    parser code {:
+        private ClassSyntax classFinalSystax ;
+        private ListType typeDate = null;
+        private ListType typeMethods = null;
+        private Symbol s;
+        private String nameClass;
+        private String nameVariable;
+        private String nameMethods;
+        private List<Method> ListMethods =new ArrayList<>();
+        private List<Variable> ListVariable= new ArrayList<>();
+        private List<Variable> listParameters= new ArrayList<>();
+        private int errorCounter= 0;
+
+        parser(Lexico lexico){
+            super(lexico);
+        }
+        public void syntax_error(Symbol cur_token) {
+            errorCounter++;
+            ServerGui.jTextArea1.append("\n"+errorCounter+" - Clase<"+nameClass+"> en simbolo<" + sym.terminalNames[cur_token.sym]+String.format(">posicion: <%d>, <%d>", (cur_token.left+1), (cur_token.right+1)));
+        }
+     
+        public Symbol getSymbol(){
+            return this.s;
+        }
+
+       private void addVariable (int aleft,int aright){
+            ListVariable.add(new Variable(typeDate,aright+1,aleft+1,nameVariable));
+            typeDate=null;
+            nameVariable = "";
+        }
+        private void addMethods (int aleft,int aright){
+            if(typeMethods ==null){
+                typeMethods = ListType.CONSTRUCTOR;
+            }
+            ListMethods.add(new Method(typeMethods, listParameters, (aright+1), (aleft+1), nameMethods));
+            listParameters =  new ArrayList<>();
+            typeMethods=null;
+            nameVariable = "";
+        }
+        private void addMethodsParameters (int aleft,int aright){
+      
+            listParameters.add(new Variable(typeDate,aright+1,aleft+1,nameVariable));
+            typeDate=null;
+            nameVariable = "";
+        }
+        public void arrayType() {
+        switch (typeDate) {
+            case BYTE:
+                typeDate = ListType.ARRAYBYTE;
+                break;
+            case SHORT:
+                typeDate = ListType.ARRAYSHORT;
+                break;
+            case INT:
+                typeDate = ListType.ARRAYINT;
+                break;
+            case LONG:
+                typeDate = ListType.ARRAYLONG;
+                break;
+            case FLOAT:
+                typeDate = ListType.ARRAYFLOAT;
+                break;
+            case DOUBLE:
+                typeDate = ListType.ARRAYDOUBLE;
+                break;
+            case CHAR:
+                typeDate = ListType.ARRAYCHAR;
+                break;
+            case BOOLEAN:
+                typeDate = ListType.ARRAYBOOLEAN;
+                break;
+            case STRING:
+                typeDate = ListType.ARRAYSTRING;
+                break;
+            case OBJECT:
+                typeDate = ListType.ARRAYOBJECT;
+                break;
+            default:
+                break;
+        }
+    }
+    public String getNameClass(){
+        return this.nameClass;
+    }
+        public int getErrorCounter(){
+            return this.errorCounter;
+        }
+        public List<Variable> getListVariable() {
+        return ListVariable;
+        }
+        public List<Method> getListMethods() {
+        return ListMethods;
+        }
+        public ClassSyntax getClassSyntax(){
+            return this.classFinalSystax;
+        }
+:}
+
+terminal String BYTE,SHORT,INT,LONG,FLOAT,F,DOUBLE;//num
+terminal String CHAR,CARACTER,CHARTN;//CARACTER
+terminal String BOOLEAN,TRUE,FALSE,ADMIRACION,INTERO;//boolean
+
+terminal PACKAGE,IMPORT;
+
+terminal PUNTO,PUNTO_COMA,SIMPLE_COMILLA,DOBLE_PUNTO,COMA;//PUNTUACION
+/*************CLASE***************/
+terminal CLASS,THIS;
+terminal EXNTENDS,IMPLEMENTS,SUPER;//HERENCIA
+/*************TODAS PARTES***************/
+terminal NEW,VOID;
+/*TRY CATCH*/
+terminal TRY,CATCH;
+/*SENTENCIAS DE CONTORL*/
+terminal FOR,WHILE,DO,IF,ELSE,SWITCH,CASE,DEFAULT;
+/*FINAL SENTENCIAS DE CONTORL*/ 
+terminal BREAK,RETURN;
+/*VISIBILIDA*/ 
+terminal PRIVATE,PUBLIC,PROTECTED;
+terminal FINAL,STATIC;//USO DE MEMORIA
+/****************************/
+terminal String DECIMAL,ENTERO,ID,STRING;//TOKEN 
+terminal Stirng TEXT;
+terminal SUMA_IGUAL,SUMA,CREMENTO,INCREMENTO,RESTA_IGUAL,RESTA,MULTIPLICACION_IGUAL,MULTIPLICACION,MODULO_IGUAL,DIVISION_IGUAL,DIVISION;//OPERACION
+terminal IGUAL,MODULO;//= 
+/*SIMBOLOS OPERADOR RELACIONALES MENOR_Q*/
+terminal TWOO,TWOY,DOUBLE_IGUAL,MENOR_Q_IGUAL,MAYOR_Q_IGUAL,MENOR_Q,MAYOR_Q,ONEY,ONEO,ADMIRACION_IGUAL;
+/**************************AGRUPACION********************************/
+terminal P_APERTURA,P_CIERRE,L_APERTURA,L_CIERRE,C_APERTURA,C_CIERRE;
+/*************************************NO TERMINALES******************************************************/
+non terminal inicio;//INICIO DE TODO
+/*LA PARTE DE package Y import*/
+non terminal encabezado,importacion,p,sp,spp,pc,vfactorizadoStatic,vfactorizadoVC;
+/*LA CLASE*/
+non terminal clase,internoClase,vc,staticCfianl,v,internoClaseFa,ayuda,herencia,secuenciIDHRE;
+/*VARIABLE GLOBAL O asignacionVariable DE LA CALSE*/
+non terminal asignacionVariable,vGlobal,vChar,tDAtosFacto;
+non terminal numFloat,numEntero, numDouble, variableChar, variableBoolean,variableStirng, variableObject;
+non terminal dSeguidoF,tDatos,variableID,objectInst,vGlobalFac,tDatosPrima;
+/*METODOS*/
+non terminal metodo,pMetodoS,pMetodoSP,soloId,realicarSentenciaControl;
+non terminal onlyIDArray,staticFactori,finalFactori;
+non terminal idDatoFac ,tFact,lCon, idDato,tDatosDespues;
+/*LOCAL METODO*/
+non terminal variableLocal,local,localMetodo,lConFact,loclaMetodFacto,terminalAccion,arrayID;
+non terminal variableObjectUsarCrear,variableIDLocal,variableSet,usarOBJECT,variableLocalFinal;
+/*SENTENCIAS DE CONTROLS*/
+non terminal sentenciaControl,usarVariable,usarVariableFacto;
+non terminal variableIDFor,sentenciaFor,inializarVariable,forVariableId,forVariableIdFac;
+non terminal sentenciaElse,sentenciaElseFac,staticImport,factoIDATO;
+non terminal internoSwitch,localSwitch,localSwitchDeclaracion;
+non terminal secuenciDatos,typeVarible,newParentesisOCochtes,typeVaribleSimple,operadorestDatos;
+non terminal serietDatos,tDatosserietDatos,castin,signacionVariableSecuencial,signacionVariableFactori;
+/*************************************PRECEDENCIA******************************************************/
+precedence left SUMA, RESTA;
+precedence left MULTIPLICACION, DIVISION;
+precedence left MODULO,DIVISION;
+precedence left DOUBLE_IGUAL,ADMIRACION_IGUAL;
+precedence left MAYOR_Q_IGUAL,MENOR_Q;
+precedence left MENOR_Q_IGUAL,MAYOR_Q;
+precedence left TWOO,ONEO;
+precedence left TWOY,ONEY;
+/*************************************GRAMATICA******************************************************/
+start with inicio;
+/******INICIO DE TODO *****/
+inicio ::= encabezado clase {:classFinalSystax = new ClassSyntax(nameClass, ListMethods, ListVariable, null);
+;
+/*****PRIMERA PARTE*******/
+encabezado ::= PACKAGE ID pc importacion
+|importacion
+;
+//punto id ; , punto id punto id ;
+pc ::= PUNTO ID pc
+| p
+;
+
+importacion ::= IMPORT staticImport ID sp importacion
+|
+;
+staticImport ::= STATIC
+|
+;
+// punto id, ; , punto * ; , punto id punto * ;
+sp ::= PUNTO spp
+| p
+;
+spp ::= MULTIPLICACION p
+| ID sp
+;
+p ::=  PUNTO_COMA
+| error{:
+ServerGui.jTextArea1.append("\n"+errorCounter+" - Clase<"+nameClass+"> en simbolo<" + sym.terminalNames[cur_token.sym]+String.format(">posicion: <%d>, <%d>", (cur_token.left+1), (cur_token.right+1)));
+:}
+;
+/*****FINAL PRIMERA PARTE****/
+/*PARTE DE LA CLASE ******************************************************* CLASE CLASE*/
+clase ::= v CLASS ID:a {:nameClass = a.toString();:} herencia L_APERTURA  internoClase  L_CIERRE
+;
+herencia ::= 
+| EXNTENDS ID secuenciIDHRE herencia
+| IMPLEMENTS ID secuenciIDHRE herencia
+;
+secuenciIDHRE ::= PUNTO ID secuenciIDHRE
+|
+;
+/*VISIBILIDAD DE LAS CLASES*/
+// STATIC FINAL, STATIC ,FINAL STATIC ,FINAL ,STATIC FINAL vc, STATIC vc ,FINAL STATIC vc,FINAL  vc
+// vc STATIC FINAL,vc STATIC , vc FINAL STATIC ,vc FINAL
+v ::= staticCfianl vfactorizadoStatic
+| vc vfactorizadoVC
+;
+vfactorizadoStatic ::= vc
+|
+;
+vfactorizadoVC ::= staticCfianl
+|
+;
+staticCfianl ::= STATIC staticFactori
+|FINAL finalFactori
+;
+//*
+staticFactori ::= FINAL
+|
+;
+finalFactori ::= STATIC
+|
+;
+vc ::= PUBLIC
+| PRIVATE
+| PROTECTED
+;
+/*FIANAL VISIBILIDAD DE LAS CLASES*/
+internoClase ::= vGlobal internoClaseFa
+| 
+;
+/*VISIBILIDAD DE LAS VARIALBES DE ATRIBUTOS O METODOS DE UNA CLASE*/
+vGlobal ::= vc vGlobalFac 
+| vGlobalFac
+;
+vGlobalFac ::= staticCfianl
+| 
+;
+internoClaseFa ::= variableID ayuda
+|ayuda
+;
+/*AQUIE SE DIFERENCIA SI ES UNA METODO O ATRIBUTO*/
+ayuda ::= asignacionVariable {:
+            int aleft = ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()).left;
+		    int aright = ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()).right;
+            addVariable(aleft,aright);
+            :} 
+              internoClase 
+| metodo 
+ {:
+            int aleft = ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()).left;
+		    int aright = ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()).right;
+            addMethods(aleft,aright);
+            :}
+internoClase
+;
+/*****************VARIABLE**************/
+variableID ::= numFloat 
+| numDouble 
+| variableChar 
+| variableBoolean 
+| variableStirng 
+| variableObject 
+| numEntero 
+;
+typeVarible ::= ID
+|FLOAT
+|DOUBLE
+|CHAR
+|BOOLEAN
+|STRING
+|BYTE
+|SHORT
+|INT
+|LONG
+| error{:
+Console.ConsoleText.append("\n"+errorCounter+" - Clase<"+nameClass+"> en simbolo<" + sym.terminalNames[cur_token.sym]+String.format(">posicion: <%d>, <%d>", (cur_token.left+1), (cur_token.right+1)));
+:}
+;
+numFloat ::= FLOAT {:typeDate = ListType.FLOAT;:} onlyIDArray;
+numDouble ::= DOUBLE {:typeDate = ListType.DOUBLE;:}  onlyIDArray;
+variableChar ::= CHAR {:typeDate = ListType.CHAR;:} onlyIDArray;
+variableBoolean ::=BOOLEAN {:typeDate = ListType.BOOLEAN;:} onlyIDArray;
+variableStirng ::= STRING {:typeDate = ListType.STRING;:} onlyIDArray;
+variableObject ::= ID {:typeDate = ListType.OBJECT;:} onlyIDArray;
+numEntero ::= BYTE {:typeDate = ListType.BYTE;:} onlyIDArray
+| SHORT {:typeDate = ListType.SHORT;:} onlyIDArray
+| INT {:typeDate = ListType.INT;:} onlyIDArray
+| LONG {:typeDate = ListType.LONG;:} onlyIDArray 
+;
+//arreay [] | ID
+onlyIDArray ::= ID:a arrayID {:nameVariable = a.toString();:}
+| C_APERTURA  C_CIERRE {:arrayType();:} onlyIDArray
+;
+arrayID ::= C_APERTURA C_CIERRE
+|
+;
+/*****************FINAL VARIABLE**************/
+/*****************VARIABLES INDIALIZADAS DE UNA CLASE**************/
+asignacionVariable ::=  IGUAL tDatos signacionVariableSecuencial
+|p
+;
+signacionVariableSecuencial ::= p
+|  COMA ID signacionVariableFactori
+;
+signacionVariableFactori ::= IGUAL tDatos signacionVariableSecuencial
+|  p
+;
+//el uso del ()? tDatos : tDatos | ()? tDatos : ()? tDatos : tDatos
+tDatos ::= tDAtosFacto tDatosPrima
+;
+tDAtosFacto ::= vChar
+|F
+|L_APERTURA lCon
+|NEW typeVarible newParentesisOCochtes
+|FALSE
+|TRUE
+|ENTERO
+|DECIMAL
+|TEXT 
+|usarOBJECT
+|P_APERTURA castin
+|ADMIRACION tDatos
+| error{:
+
+ServerGui.jTextArea1.append("\n"+errorCounter+" - Clase<"+nameClass+"> en simbolo<" + sym.terminalNames[cur_token.sym]+String.format(">posicion: <%d>, <%d>", (cur_token.left+1), (cur_token.right+1)));
+:}
+;
+tDatosPrima ::= operadorestDatos tDatos
+|
+;
+castin ::=  tDatos P_CIERRE  tDatosDespues
+| typeVaribleSimple P_CIERRE  tDatos
+;
+tDatosDespues ::= operadorestDatos tDatos
+| INTERO tDatos DOBLE_PUNTO tDatos
+|
+;
+typeVaribleSimple ::= FLOAT
+|DOUBLE
+|CHAR
+|BOOLEAN
+|STRING
+|BYTE
+|SHORT
+|INT
+|LONG
+;
+operadorestDatos ::= TWOO
+|TWOY
+|DOUBLE_IGUAL
+|MENOR_Q_IGUAL
+|MAYOR_Q_IGUAL
+|MENOR_Q
+|MAYOR_Q
+|ONEY
+|ONEO
+|ADMIRACION_IGUAL
+|SUMA
+|RESTA
+|MULTIPLICACION
+|DIVISION
+|MODULO
+;
+newParentesisOCochtes ::= P_APERTURA  tFact
+| C_APERTURA tDatosserietDatos C_CIERRE serietDatos
+;
+serietDatos ::= L_APERTURA lCon
+|
+;
+tDatosserietDatos ::= tDatos
+|
+;
+//para los char
+vChar ::= SIMPLE_COMILLA CARACTER SIMPLE_COMILLA
+| CHARTN
+;
+//esto para new id (parametos de objetos)
+tFact ::= dSeguidoF P_CIERRE 
+| P_CIERRE 
+;
+dSeguidoF ::= tDatos objectInst
+;
+objectInst ::= COMA dSeguidoF
+|
+;
+// esto para crear arreglos{}
+lCon ::= tDatos lConFact L_CIERRE
+| L_CIERRE
+;
+lConFact ::=  COMA tDatos  lConFact
+|
+;
+//USAR OBJECT
+usarOBJECT ::= ID idDato
+;
+//ARRAY.LETER - 4 ,ID.ID(); //GET
+idDato ::= PUNTO idDatoFac
+|C_APERTURA tDatos C_CIERRE idDato
+|P_APERTURA factoIDATO
+|
+;
+factoIDATO ::= dSeguidoF P_CIERRE
+|P_CIERRE
+;
+
+idDatoFac ::= ID  idDato
+;
+/*****************FINAL VARIABLES INDIALIZADAS DE UNA CLASE**************/
+/***********************************METODOS**************/
+metodo ::= {:nameMethods=nameVariable;typeMethods = typeDate;:} P_APERTURA pMetodoS P_CIERRE L_APERTURA  localMetodo  L_CIERRE 
+|VOID {:typeMethods = ListType.VOID;:}  ID:a {:nameMethods = a.toString();:} P_APERTURA pMetodoS P_CIERRE L_APERTURA  localMetodo   L_CIERRE
+|ID:a {:nameMethods = a.toString();:} P_APERTURA pMetodoS P_CIERRE L_APERTURA  localMetodo  L_CIERRE
+;
+//peticiiones de metodos
+pMetodoS ::= variableID {:
+            int aleft = ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()).left;
+		    int aright = ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()).right;
+            addMethodsParameters(aleft,aright);
+            :} pMetodoSP
+|
+;
+pMetodoSP ::= COMA pMetodoS
+| 
+;
+/***********************************FINAL METODOS**************/
+/*LO QUE SE PUEDE HACER DENTRO DE UN METODO*/
+localMetodo ::= local  localMetodo
+|
+;
+local ::= variableLocal
+|sentenciaControl
+|terminalAccion
+;
+/*VARIALBES LOCALES DENTRO DE UN METODO*/
+variableLocal ::= variableLocalFinal asignacionVariable
+;
+//VARIABLE FINAL 
+variableLocalFinal ::= FINAL variableIDLocal
+|variableIDLocal
+|usarVariable
+|terminalAccion
+;
+variableIDLocal ::= numFloat 
+| numDouble 
+| variableChar 
+| variableBoolean 
+| variableStirng  
+| numEntero 
+;
+
+/*CUALQUIER ACCION menos colocar otra sentencia ya no es*/
+usarVariable ::= ID usarVariableFacto
+|THIS loclaMetodFacto
+|SUPER soloId  P_APERTURA tDatos secuenciDatos P_CIERRE
+;
+soloId ::= PUNTO ID soloId
+|
+;
+secuenciDatos ::=  COMA tDatos secuenciDatos
+|
+;
+// id ++ id-- id+= id -=
+usarVariableFacto ::= CREMENTO
+|SUMA_IGUAL tDatos 
+|INCREMENTO
+|RESTA_IGUAL tDatos
+|MULTIPLICACION_IGUAL tDatos
+|DIVISION_IGUAL tDatos
+|MODULO_IGUAL tDatos
+|ID loclaMetodFacto
+|loclaMetodFacto
+|C_APERTURA tDatos C_CIERRE loclaMetodFacto
+|P_APERTURA  factoIDATO
+;
+//asignar al set
+loclaMetodFacto ::= PUNTO  ID  variableObjectUsarCrear 
+|
+;
+variableObjectUsarCrear ::= P_APERTURA variableSet
+|loclaMetodFacto
+;
+variableSet ::= tDatos secuenciDatos P_CIERRE 
+|P_CIERRE
+;
+terminalAccion ::= RETURN tDatos p
+|BREAK p
+;
+/*VARIALBES LOCALES DENTRO DE UN METODO*/
+/*SENTENCIAS DE CONTROL*/
+sentenciaControl ::= WHILE P_APERTURA tDatos P_CIERRE realicarSentenciaControl
+|DO realicarSentenciaControl WHILE P_APERTURA tDatos P_CIERRE p
+|IF P_APERTURA tDatos P_CIERRE realicarSentenciaControl sentenciaElse
+|SWITCH P_APERTURA tDatos P_CIERRE L_APERTURA internoSwitch L_CIERRE
+|FOR P_APERTURA inializarVariable  sentenciaFor
+;
+realicarSentenciaControl ::= L_APERTURA localMetodo L_CIERRE ;
+
+//sentencia try ca
+//sentencia de switch
+internoSwitch ::= CASE dSeguidoF  DOBLE_PUNTO localSwitch internoSwitch
+|DEFAULT DOBLE_PUNTO localSwitch  
+|
+;
+localSwitch ::= localSwitchDeclaracion  localSwitch 
+|terminalAccion //esto de ultimo si o si
+;
+localSwitchDeclaracion ::= variableLocal 
+|sentenciaControl 
+;
+//sentencia de for
+sentenciaFor ::=  P_CIERRE realicarSentenciaControl
+| tDatos p usarVariable  P_CIERRE realicarSentenciaControl
+;
+inializarVariable ::= variableIDFor asignacionVariable
+| ID forVariableId
+;  
+variableIDFor ::= numFloat 
+| numDouble 
+| variableChar 
+| variableBoolean 
+| variableStirng 
+| numEntero 
+| error{:
+ServerGui.jTextArea1.append("\n"+errorCounter+" - Clase<"+nameClass+"> en simbolo<" + sym.terminalNames[cur_token.sym]+String.format(">posicion: <%d>, <%d>", (cur_token.left+1), (cur_token.right+1)));
+:}
+;
+forVariableId ::= ID forVariableIdFac
+| C_APERTURA C_CIERRE forVariableId
+;
+forVariableIdFac ::= DOBLE_PUNTO ID
+| asignacionVariable
+;
+//USO DE IF ELSE IF ELSE
+sentenciaElse ::= ELSE  sentenciaElseFac
+|
+;
+sentenciaElseFac ::= L_APERTURA localMetodo L_CIERRE
+|IF P_APERTURA tDatos P_CIERRE L_APERTURA localMetodo L_CIERRE sentenciaElse
+| error {:
+ServerGui.jTextArea1.append("\n"+errorCounter+" - Clase<"+nameClass+"> en simbolo<" + sym.terminalNames[cur_token.sym]+String.format(">posicion: <%d>, <%d>", (cur_token.left+1), (cur_token.right+1)));
+:}
+;
