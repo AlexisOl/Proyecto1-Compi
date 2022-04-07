@@ -15,7 +15,7 @@ import Objects.Token;
 public class convertidorJson {
     private final String NAME = "Nombre";
     private final String TEXT = "Texto";
-    private final String FUNCTION = "Funcion";
+    private final String FUNCION = "Funcion";
     private final String SCORE = "Score";
     private final String TIPODATO = "Tipo";
 
@@ -42,7 +42,7 @@ public class convertidorJson {
             text += "\n\t\t{";
             text += NAME + ":" + "\"" + element.getVariable().getLexema() + "\"" + ",";
             text += TIPODATO + ":" + "\"" + element.getVariable().getType() + "\"" + ",";
-            text += FUNCTION + ":" + "\"" + element.getOriginal() + "," + element.getWho()
+            text += FUNCION + ":" + "\"" + element.getOriginal() + "," + element.getFunction()
                     + "\"";
             text += "}";
             i++;

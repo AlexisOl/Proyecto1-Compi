@@ -13,7 +13,7 @@ import Socket.Conexion;
  */
 public class NewMain {
 
-public static final int PORT = (((10300)));
+public static final int PORT = 10300;
     public static void main(String[] args) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {

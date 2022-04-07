@@ -9,12 +9,12 @@ import Objects.VariableObject;
 public class HelperVariable {
     private VariableObject variable;
     private String original;
-    private String who;
+    private String function;
 
-    public HelperVariable(VariableObject variable, String original, String who) {
+    public HelperVariable(VariableObject variable, String original, String function) {
         this.variable = variable;
         this.original = original;
-        this.who = who;
+        this.function = function;
     }
 
     public VariableObject getVariable() {
@@ -27,12 +27,12 @@ public class HelperVariable {
 
 
 
-    public String getWho() {
-        return who;
+    public String getFunction() {
+        return function;
     }
 
-    public void setWho(String who) {
-        this.who = who;
+    public void setFunction(String who) {
+        this.function = who;
     }
 
         public String getOriginal() {

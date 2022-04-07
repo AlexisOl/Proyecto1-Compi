@@ -53,7 +53,6 @@ public class comparacionProyectos {
             list.add(proyectOne);
             list.add(proyectTwo);
             send.writeObject(list);
-            //send.writeObject(new SendSocektProyects(proyectOne, proyectTwo));
             String resivido = (String) in2.readObject();
             result = resivido;
             send.close();
