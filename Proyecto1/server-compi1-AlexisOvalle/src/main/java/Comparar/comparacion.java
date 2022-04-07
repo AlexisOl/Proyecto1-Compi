@@ -50,7 +50,7 @@ public class comparacion extends Thread {
     public jsonObject comparacionAnalisis() {
         this.start();
         AnalizadorMetodos();
-        analyzerVariable();
+        analizarVariable();
         try {
             do {
                 Thread.sleep(500);
@@ -86,8 +86,8 @@ public class comparacion extends Thread {
     //metodos iguales
     private boolean metodosIguales(metodoObject methodOne, metodoObject methodTWO) {
         if (!methodTWO.isFlag()) {
-            if (analyzerNameClass(methodOne.getLexema(), methodTWO.getLexema())
-                    && equivalentParamet(methodOne.getListParameters(), methodTWO.getListParameters())) {
+            if (analizarNombreClase(methodOne.getLexema(), methodTWO.getLexema())
+                    && ParametrosEquivalentes(methodOne.getListParameters(), methodTWO.getListParameters())) {
                 return true;
             }
         }
@@ -95,7 +95,7 @@ public class comparacion extends Thread {
     }
 
     // n
-    private boolean equivalentParamet(List<VariableObject> listParametersOne, List<VariableObject> listParametersTwo) {
+    private boolean ParametrosEquivalentes(List<VariableObject> listParametersOne, List<VariableObject> listParametersTwo) {
         int i = (listParametersOne.size() > listParametersTwo.size()) ? listParametersTwo.size()
                 : listParametersOne.size();
         int conter = 0;
@@ -103,14 +103,14 @@ public class comparacion extends Thread {
             return listParametersOne.size() == listParametersTwo.size();
         }
         for (int j = 0; j < i; j++) {
-            if (equivalentVariable(listParametersOne.get(j), listParametersTwo.get(j))) {
+            if (repeticionVariables(listParametersOne.get(j), listParametersTwo.get(j))) {
                 conter++;
             }
         }
         return conter == i;
     }
 
-    private void analyzerVariable() {
+    private void analizarVariable() {
         for (classObject classSyntax : Archivo2) {
             for (classObject classSyntaxComparar : Archivo1) {
                 for (VariableObject variable : classSyntax.getListVariable()) {
@@ -118,7 +118,7 @@ public class comparacion extends Thread {
 
 // variables de clase
                     for (VariableObject variableTWO : classSyntaxComparar.getListVariable()) {
-                        if (equivalentVariable(variable, variableTWO)) {
+                        if (repeticionVariables(variable, variableTWO)) {
                             generarJson.getListVariable().add(new HelperVariable(variable, classSyntax.getName(),
                                     classSyntaxComparar.getName()));
                             variableTWO.setBandera(true);
@@ -127,7 +127,7 @@ public class comparacion extends Thread {
                     // parametros de clase dos
                     for (metodoObject method : classSyntaxComparar.getListMethods()) {
                         for (VariableObject variableTWO : method.getListParameters()) {
-                            if (equivalentVariable(variable, variableTWO)) {
+                            if (repeticionVariables(variable, variableTWO)) {
                                 generarJson.getListVariable().add(new HelperVariable(variable, classSyntax.getName(), method.getLexema()));
                                 variableTWO.setBandera(true);
                             }
@@ -140,7 +140,7 @@ public class comparacion extends Thread {
                     
                     for (VariableObject variable : methodClassOne.getListParameters()) {
                         for (VariableObject variableTWO : classSyntaxComparar.getListVariable()) {
-                            if (equivalentVariable(variable, variableTWO)) {
+                            if (repeticionVariables(variable, variableTWO)) {
                                 generarJson.getListVariable()
                                         .add(new HelperVariable(variable, methodClassOne.getLexema(),
                                                 classSyntaxComparar.getName()));
@@ -150,7 +150,7 @@ public class comparacion extends Thread {
 
                         for (metodoObject method : classSyntaxComparar.getListMethods()) {
                             for (VariableObject variableTWO : method.getListParameters()) {
-                                if (equivalentVariable(variable, variableTWO)) {
+                                if (repeticionVariables(variable, variableTWO)) {
                                     generarJson.getListVariable().add(new HelperVariable(variable, method.getLexema(),
                                                     classSyntaxComparar.getName()));
                                     variableTWO.setBandera(true);
@@ -163,15 +163,15 @@ public class comparacion extends Thread {
         }
     }
 
-    private void analyzerClass(classObject classSyntax, classObject classSyntaxComparar) {
+    private void AnalizarClase(classObject classSyntax, classObject classSyntaxComparar) {
         // if name class ==
-        if (analyzerNameClass(classSyntax.getName(), classSyntaxComparar.getName())
-                & analyzerMethodClass(classSyntax.getListMethods(), classSyntaxComparar.getListMethods())) {
+        if (analizarNombreClase(classSyntax.getName(), classSyntaxComparar.getName())
+                & analyzerMetodo_Clase(classSyntax.getListMethods(), classSyntaxComparar.getListMethods())) {
             generarJson.getListNameClass().add(classSyntaxComparar.getName());
         }
     }
 
-    private boolean analyzerMethodClass(List<metodoObject> classOne, List<metodoObject> classTwo) {
+    private boolean analyzerMetodo_Clase(List<metodoObject> classOne, List<metodoObject> classTwo) {
         int i = (classOne.size() > classTwo.size()) ? classTwo.size() : classOne.size();
         int conter = 0;
         if (i == 0) {
@@ -179,26 +179,26 @@ public class comparacion extends Thread {
         }
         for (int j = 0; j < i; j++) {
 // mismo nombre
-            if (analyzerNameClass(classOne.get(j).getLexema(), classTwo.get(j).getLexema())) {
+            if (analizarNombreClase(classOne.get(j).getLexema(), classTwo.get(j).getLexema())) {
                 conter++;
             }
         }
         return conter == i;
     }
 
-    private boolean analyzerNameClass(String classSyntax, String classSyntaxComparar) {
+    private boolean analizarNombreClase(String classSyntax, String classSyntaxComparar) {
         return classSyntax.equals(classSyntaxComparar);
     }
 
     // ANALYZE COMMENTS AND NAME CLASS//n3
-    private void analyzerCommentsClass() {
+    private void comentarioClaseAnalisis() {
         for (classObject classSyntax : Archivo2) {// n
             for (classObject classSyntaxComparar : Archivo1) {// n2
                 // analyzer class
-                analyzerClass(classSyntax, classSyntaxComparar);// n3
+                AnalizarClase(classSyntax, classSyntaxComparar);// n3
                 for (Token tokenONE : classSyntax.getListComments()) {// n3
                     for (Token tokenTWO : classSyntaxComparar.getListComments()) {
-                        if (equivalentComments(tokenONE, tokenTWO)) {
+                        if (comentariosIguales(tokenONE, tokenTWO)) {
                             generarJson.getListComments().add(tokenTWO);
                         }
                     }
@@ -207,9 +207,7 @@ public class comparacion extends Thread {
         }
     }
 
-    // Repeated variable if identifier and type are the same
-    // Variable repetida si el identificador y tipo son lo mismo
-    private boolean equivalentVariable(VariableObject variable, VariableObject variableTWO) {
+    private boolean repeticionVariables(VariableObject variable, VariableObject variableTWO) {
         if (!variableTWO.isBandera()) {
             return (variable.getLexema().equals(variableTWO.getLexema()))
                     && (variable.getType() == variableTWO.getType());
@@ -218,9 +216,7 @@ public class comparacion extends Thread {
         }
     }
 
-    // same text
-    // mismo texto
-    private boolean equivalentComments(Token tokenONE, Token tokenTWO) {
+    private boolean comentariosIguales(Token tokenONE, Token tokenTWO) {
         return tokenONE.getLexema().equals(tokenTWO.getLexema());
     }
 
@@ -238,7 +234,7 @@ public class comparacion extends Thread {
     public void run() {
         try {
             sumar();
-            analyzerCommentsClass();
+            comentarioClaseAnalisis();
         } catch (Exception e) {
         }
     }
