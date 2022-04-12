@@ -77,64 +77,19 @@ public class comparacion extends Thread {
                             variableTWO.setBandera(true);
                         }
                     }
-                    // parametros de clase dos
-                    for (metodoObject method : classSyntaxComparar.getListMethods()) {
-                        for (VariableObject variableTWO : method.getListParameters()) {
-                            if (repeticionVariables(variable, variableTWO)) {
-                                generarJson.getListVariable().add(new HelperVariable(variable, classSyntax.getName(), method.getLexema()));
-                                variableTWO.setBandera(true);
-                            }
-                        }
-                    }
+                   
+             
                 }
             
             }
         }
     }
 
-    private void AnalizarClase(classObject classSyntax, classObject classSyntaxComparar) {
-        // if name class ==
-        if (analizarNombreClase(classSyntax.getName(), classSyntaxComparar.getName())
-                & analyzerMetodo_Clase(classSyntax.getListMethods(), classSyntaxComparar.getListMethods())) {
-            generarJson.getListNameClass().add(classSyntaxComparar.getName());
-        }
-    }
 
-    private boolean analyzerMetodo_Clase(List<metodoObject> classOne, List<metodoObject> classTwo) {
-        int i = (classOne.size() > classTwo.size()) ? classTwo.size() : classOne.size();
-        int conter = 0;
-        if (i == 0) {
-            return classOne.size() == classTwo.size();
-        }
-        for (int j = 0; j < i; j++) {
-// mismo nombre
-            if (analizarNombreClase(classOne.get(j).getLexema(), classTwo.get(j).getLexema())) {
-                conter++;
-            }
-        }
-        return conter == i;
-    }
 
-    private boolean analizarNombreClase(String classSyntax, String classSyntaxComparar) {
-        return classSyntax.equals(classSyntaxComparar);
-    }
 
-    // ANALYZE COMMENTS AND NAME CLASS//n3
-    private void comentarioClaseAnalisis() {
-        for (classObject classSyntax : Archivo2) {
-            for (classObject classSyntaxComparar : Archivo1) {// n2
-                // analyzer class
-                AnalizarClase(classSyntax, classSyntaxComparar);// n3
-                for (Token tokenONE : classSyntax.getListComments()) {// n3
-                    for (Token tokenTWO : classSyntaxComparar.getListComments()) {
-                        if (comentariosIguales(tokenONE, tokenTWO)) {
-                            generarJson.getListComments().add(tokenTWO);
-                        }
-                    }
-                }
-            }
-        }
-    }
+
+    
 
     private boolean repeticionVariables(VariableObject variable, VariableObject variableTWO) {
         if (!variableTWO.isBandera()) {
@@ -145,9 +100,7 @@ public class comparacion extends Thread {
         }
     }
 
-    private boolean comentariosIguales(Token tokenONE, Token tokenTWO) {
-        return tokenONE.getLexema().equals(tokenTWO.getLexema());
-    }
+
 
 // calculos
     private double calculoScore(double repetido, double suma) {
@@ -163,7 +116,6 @@ public class comparacion extends Thread {
     public void run() {
         try {
             sumar();
-            comentarioClaseAnalisis();
         } catch (Exception e) {
         }
     }
