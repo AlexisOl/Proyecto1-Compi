@@ -50,27 +50,6 @@ import Objects.classObject;
             return this.s;
         }
 
-// metodos
-       private void addVariable (int aleft,int aright){
-            ListVariable.add(new VariableObject(typeDate,aright+1,aleft+1,nameVariable));
-            typeDate=null;
-            nameVariable = "";
-        }
-        private void addMethods (int aleft,int aright){
-            if(typeMethods ==null){
-                typeMethods = tipoDatos.CONSTRUCTOR;
-            }
-            ListMethods.add(new metodoObject(typeMethods, listParameters, (aright+1), (aleft+1), nameMethods));
-            listParameters =  new ArrayList<>();
-            typeMethods=null;
-            nameVariable = "";
-        }
-        private void addMethodsParameters (int aleft,int aright){
-      
-            listParameters.add(new VariableObject(typeDate,aright+1,aleft+1,nameVariable));
-            typeDate=null;
-            nameVariable = "";
-        }
 
 
         public void arrayType() {
@@ -115,70 +94,65 @@ import Objects.classObject;
         public classObject getClassSyntax(){
             return this.classFinalSystax;
         }
+        // metodos
+       private void addVariable (int aleft,int aright){
+            ListVariable.add(new VariableObject(typeDate,aright+1,aleft+1,nameVariable));
+            typeDate=null;
+            nameVariable = "";
+        }
+        private void addMethods (int aleft,int aright){
+            if(typeMethods ==null){
+                typeMethods = tipoDatos.CONSTRUCTOR;
+            }
+            ListMethods.add(new metodoObject(typeMethods, listParameters, (aright+1), (aleft+1), nameMethods));
+            listParameters =  new ArrayList<>();
+            typeMethods=null;
+            nameVariable = "";
+        }
+        private void addMethodsParameters (int aleft,int aright){
+      
+            listParameters.add(new VariableObject(typeDate,aright+1,aleft+1,nameVariable));
+            typeDate=null;
+            nameVariable = "";
+        }
+
 :};
 // ingreso de  terminales
 
-terminal String INT,DOUBLE;
-terminal String CHAR,CARACTER;
-terminal String BOOLEAN,TRUE,FALSE,ADMIRACION,INTERO;
+terminal String INT,DOUBLE, CHAR,CARACTER, BOOLEAN,TRUE,FALSE,ADMIRACION,INTERO, DECIMAL,ENTERO,ID,STRING,TEXT;
 
-terminal PACKAGE,IMPORT, PUNTO,PUNTO_COMA,SIMPLE_COMILLA,DOBLE_PUNTO,COMA, CLASS,THIS, EXNTENDS,IMPLEMENTS,SUPER, NEW,VOID;
-/*Sentencias*/
+terminal PACKAGE,IMPORT, PUNTO,PUNTO_COMA,SIMPLE_COMILLA,DOBLE_PUNTO,COMA, CLASS,THIS, EXNTENDS,IMPLEMENTS,SUPER, NEW,VOID, FOR,WHILE,DO,IF,ELSE,SWITCH,CASE,DEFAULT,BREAK,RETURN, PRIVATE,PUBLIC,PROTECTED,FINAL,STATIC;
 
-terminal FOR,WHILE,DO,IF,ELSE,SWITCH,CASE,DEFAULT,BREAK,RETURN;
 
-/*visibilidad*/ 
-terminal PRIVATE,PUBLIC,PROTECTED,FINAL,STATIC;
-/****************************/
 
-terminal String DECIMAL,ENTERO,ID,STRING,TEXT;
+terminal SUMA_IGUAL,SUMA,CREMENTO,INCREMENTO,RESTA_IGUAL,RESTA,MULTIPLICACION,DIVISION, IGUAL;
 
-//operadores aritmeticos
-terminal SUMA_IGUAL,SUMA,CREMENTO,INCREMENTO,RESTA_IGUAL,RESTA,MULTIPLICACION_IGUAL,MULTIPLICACION,MODULO_IGUAL,DIVISION_IGUAL,DIVISION;//OPERACION
-terminal IGUAL,MODULO;//= 
-
-/*SIMBOLOS OPERADOR RELACIONALES MENOR_Q*/
-terminal TWOO,TWOY,DOUBLE_IGUAL,MENOR_Q_IGUAL,MAYOR_Q_IGUAL,MENOR_Q,MAYOR_Q,ONEY,ONEO,ADMIRACION_IGUAL;
+terminal OR,AND,DOUBLE_IGUAL,MENOR_Q_IGUAL,MAYOR_Q_IGUAL,MENOR_Q,MAYOR_Q,ONEY,ONEO,ADMIRACION_IGUAL;
 /*Operadores de agupacion */
 terminal PARENTESISABIERTO,PARENTESISCERRADO,LLAVESABIERTO,LLAVESCERRADO,CORCHETEABIERTO,CORCHETECERRADO;
 
 
-// ingreso de no terminales
 non terminal inicio,inicioSintaxis,importSintaxis,puntoComaSintaxis,sp,sintaxisMayorImportaciones,pc,vfactorizadoStatic,vfactorizadoVC;
-/*LA CLASE   ingresoOpcionesClases */
 non terminal clase,internoClase,visibilidadTerminal,staticFinalSintaxisEspecifica,v,internoClaseFa,ingresoOpcionesClases,herenciaSintaxis,secuenciIDHRE;
-/*VARIABLE GLOBAL O ingresoNuevasVariables DE LA CALSE*/
 non terminal ingresoNuevasVariables,visionEspecificaDeClases,charSintaxis,tDAtosFacto;
 non terminal intTipoDato, DoubleTipoDato, CharTipoDato, BooleanTipoDato,StringTipoDato, ObjectTipoDato;
 non terminal parametrosConsecutivosOBjetos,opcionesDatosIngreso,variableID,objectInst,visualizacionClaseFinal,tDatosPrima;
-/*METODOS*/
 non terminal metodoSintaxis,pMetodoS,pMetodoSP,soloId,realicarSentenciasControlSintaxisGeneral;
-non terminal onlyIDArray,staticOpcionInclusion,finalOpcionInclusion;
-non terminal idDatoFac ,parametrosSintaxisGeneral,lCon, idDato,tDatosDespues;
-/*LOCAL METODO*/
-non terminal variableLocal,local,localMetodo,lConFact,loclaMetodFacto,salidasOpciones,arrayID;
-non terminal variableObjectUsarCrear,variableIDLocal,variableSet,usarOBJECT,variableLocalFinal;
-/*SENTENCIAS DE CONTROLS*/
-non terminal SentenciasControlSintaxisGeneral,usarVariable,OperadoresIncrementales;
-non terminal variableIDFor,ForSintaxisGeneral,inializarVariable,forVariableId,forVariableIdFac;
-non terminal sentenciaElse,sentenciaElseFac,staticImport,factoIDATO, operadoresAritmeticos;
-non terminal SwitchSintaxisGeneral,SwitchEspecificoSintaxis,declaracionesSwitch;
-non terminal secuenciDatos,tipoDatosSintaxis,newParentesisOCochtes,typeVaribleSimple,operadoresTipos;
-non terminal serietDatos,tDatosserietDatos,Casting,variablesConsecutivas,variablesConsecutivasFactores, funcionesBooleanas, expresionesEspecificasElementales;
+non terminal onlyIDArray,staticOpcionInclusion,finalOpcionInclusion, idDatoFac ,parametrosSintaxisGeneral, idDato,tDatosDespues;
+non terminal variableLocal,local,localMetodo,lConFact,loclaMetodFacto,salidasOpciones,arrayID, variableObjectUsarCrear,variableIDLocal,variableSet,usarOBJECT,variableLocalFinal, SentenciasControlSintaxisGeneral,usarVariable,OperadoresIncrementales, variableIDFor,ForSintaxisGeneral,inializarVariable, sentenciaElse,sentenciaElseFac,staticImport,factoIDATO, operadoresAritmeticos, SwitchSintaxisGeneral,SwitchEspecificoSintaxis,declaracionesSwitch, secuenciDatos,tipoDatosSintaxis,newParentesisOCochtes,typeVaribleSimple,operadoresTipos, Casting,variablesConsecutivas,variablesConsecutivasFactores, funcionesBooleanas, expresionesEspecificasElementales;
 
 
 
 // formas de precedencia
 precedence left SUMA, RESTA;
 precedence left MULTIPLICACION, DIVISION;
-precedence left MODULO,DIVISION;
 
 
 precedence left DOUBLE_IGUAL,ADMIRACION_IGUAL;
 precedence left MAYOR_Q_IGUAL,MENOR_Q;
 precedence left MENOR_Q_IGUAL,MAYOR_Q;
-precedence left TWOO,ONEO;
-precedence left TWOY,ONEY;
+precedence left OR,ONEO;
+precedence left AND,ONEY;
 
 // Inicio de las gramaticas -- INGRESO DE CLASE DE FORMA GENERAL
 start with inicio;
@@ -425,13 +399,9 @@ IGUAL opcionesDatosIngreso variablesConsecutivas
 // Opciones de ingreso de variables
 tDAtosFacto ::= 
     charSintaxis
-    |LLAVESABIERTO lCon
-    |NEW tipoDatosSintaxis newParentesisOCochtes
     |funcionesBooleanas
     |expresionesEspecificasElementales
-    |usarOBJECT
     |Casting
-    |ADMIRACION opcionesDatosIngreso
 | error{:NewJFrame.jTextArea1.append("\n"+cantidadErrores+"  Error en clase: "+nameClass+" lexema:" + sym.terminalNames[cur_token.sym]);:}
 ;
 // FUNCIONES BOOLEANAS------------------------------------------------------------------
@@ -475,15 +445,13 @@ typeVaribleSimple ::=
 ;
 
 operadoresTipos ::= 
-    TWOO
-    |TWOY
+    OR
+    |AND
     |DOUBLE_IGUAL
     |MENOR_Q_IGUAL
     |MAYOR_Q_IGUAL
     |MENOR_Q
     |MAYOR_Q
-    |ONEY
-    |ONEO
     |ADMIRACION_IGUAL
     |operadoresAritmeticos
   
@@ -494,7 +462,6 @@ operadoresAritmeticos ::=
     |RESTA
     |MULTIPLICACION
     |DIVISION
-    |MODULO
 ;
 //Sintaxis para varibles char------------------------------------------
 charSintaxis ::= 
@@ -504,19 +471,11 @@ charSintaxis ::=
 // ingreso de parentesis 
 newParentesisOCochtes ::= 
     parametrosSintaxisGeneral
-    | CORCHETEABIERTO tDatosserietDatos CORCHETECERRADO serietDatos
 ;
 
 
-tDatosserietDatos ::=
-    opcionesDatosIngreso
-    |
-;
 
-serietDatos ::=
-    LLAVESABIERTO lCon
-    |
-;
+
 
 //parametros consecuti
 parametrosSintaxisGeneral ::=
@@ -533,40 +492,6 @@ objectInst ::=
 |
 ;
 
-
-//ARREGLOS-------- idDato
-// esto para crear arreglos{}
-lCon ::=
- opcionesDatosIngreso lConFact LLAVESCERRADO
-| LLAVESCERRADO
-;
-
-lConFact ::=
-  COMA opcionesDatosIngreso  lConFact
-|
-;
-
-//USAR OBJECT------------------------------------------------------------------------------------
-usarOBJECT ::= 
-    ID idDato
-;
-
-//ARRAY.LETER - 4 ,ID.ID(); //GET
-idDatoFac ::= 
-    ID  idDato
-;
-
-idDato ::= 
-    PUNTO idDatoFac
-    |CORCHETEABIERTO opcionesDatosIngreso CORCHETECERRADO idDato
-    |PARENTESISABIERTO factoIDATO
-    |
-;
-
-factoIDATO ::=
-    parametrosConsecutivosOBjetos PARENTESISCERRADO
-    |PARENTESISCERRADO
-;
 
 
 /**INgreso de metodos------------------------------------------------------------------------**/
@@ -640,19 +565,13 @@ secuenciDatos ::=
 |
 ;
 
-// id ++ id-- id+= id -=
 OperadoresIncrementales ::= 
     CREMENTO
     |SUMA_IGUAL opcionesDatosIngreso 
     |INCREMENTO
     |RESTA_IGUAL opcionesDatosIngreso
-    |MULTIPLICACION_IGUAL opcionesDatosIngreso
-    |DIVISION_IGUAL opcionesDatosIngreso
-    |MODULO_IGUAL opcionesDatosIngreso
     |ID loclaMetodFacto
     |loclaMetodFacto
-    |CORCHETEABIERTO opcionesDatosIngreso CORCHETECERRADO loclaMetodFacto
-    |PARENTESISABIERTO  factoIDATO
 ;
 //asignar al set
 loclaMetodFacto ::= 
@@ -677,6 +596,9 @@ salidasOpciones ::=
     BREAK puntoComaSintaxis
     |RETURN opcionesDatosIngreso puntoComaSintaxis
 ;
+
+
+
 /*sentencias de control
 ----------------------------------------------------------------------------------------------
 */
@@ -685,7 +607,6 @@ WHILE PARENTESISABIERTO opcionesDatosIngreso PARENTESISCERRADO realicarSentencia
 |DO realicarSentenciasControlSintaxisGeneral WHILE PARENTESISABIERTO opcionesDatosIngreso PARENTESISCERRADO puntoComaSintaxis
 |IF PARENTESISABIERTO opcionesDatosIngreso PARENTESISCERRADO realicarSentenciasControlSintaxisGeneral sentenciaElse
 |SWITCH PARENTESISABIERTO opcionesDatosIngreso PARENTESISCERRADO LLAVESABIERTO SwitchSintaxisGeneral LLAVESCERRADO
-|FOR PARENTESISABIERTO inializarVariable  ForSintaxisGeneral
 ;
 
 
@@ -710,36 +631,7 @@ declaracionesSwitch ::=
     |SentenciasControlSintaxisGeneral 
 ;
 //-------------------------------------------------------------------------------------------
-//sentencia de for
-ForSintaxisGeneral ::= 
- PARENTESISCERRADO realicarSentenciasControlSintaxisGeneral
-| opcionesDatosIngreso puntoComaSintaxis usarVariable  PARENTESISCERRADO realicarSentenciasControlSintaxisGeneral
-;
 
-inializarVariable ::= 
-variableIDFor ingresoNuevasVariables
-| ID forVariableId
-;  
-
-variableIDFor ::=
-  
- DoubleTipoDato 
-| CharTipoDato 
-| BooleanTipoDato 
-| StringTipoDato 
-| intTipoDato 
-| error{:NewJFrame.jTextArea1.append("\n"+cantidadErrores+"  Error en clase: "+nameClass+" lexema:" + sym.terminalNames[cur_token.sym]);:}
-;
-
-forVariableId ::= 
-ID forVariableIdFac
-| CORCHETEABIERTO CORCHETECERRADO forVariableId
-;
-
-forVariableIdFac ::=
- DOBLE_PUNTO ID
-| ingresoNuevasVariables
-;
 
 //Sintaxis IF Y ELSE
 sentenciaElse ::=
