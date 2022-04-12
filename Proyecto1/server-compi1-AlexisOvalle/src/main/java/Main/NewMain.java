@@ -4,7 +4,7 @@
  */
 package Main;
 
-import Frontend.ServerGui;
+import Frontend.*;
 import Socket.Conexion;
 
 /**
@@ -17,7 +17,7 @@ public static final int PORT = 10300;
     public static void main(String[] args) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-               new ServerGui().setVisible(true);
+               new NewJFrame().setVisible(true);
                 Conexion server = new Conexion(PORT);
                 server.start();
             }

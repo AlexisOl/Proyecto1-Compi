@@ -74,6 +74,11 @@ public class ProyectosComparaciones extends javax.swing.JFrame {
 
         jButtonViewResults.setText("Ver");
         jButtonViewResults.setEnabled(false);
+        jButtonViewResults.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonViewResultsActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -143,6 +148,10 @@ public class ProyectosComparaciones extends javax.swing.JFrame {
             System.out.println(json);
         }
     }//GEN-LAST:event_botonCompararActionPerformed
+
+    private void jButtonViewResultsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonViewResultsActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButtonViewResultsActionPerformed
 
     
     

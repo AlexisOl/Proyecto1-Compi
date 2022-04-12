@@ -1,558 +1,754 @@
-    package com.cunoc.JFlex_Cup.Java;
+package AnalizadoresLex_Sin;
 import java_cup.runtime.*;
 import java.util.ArrayList;
 import java.util.List;
+import java_cup.runtime.Symbol;
 
-import com.cunoc.Server.Console;
-import Frontend.ServerGui;
-import Objects.ListType;
-import Objects.Method;
-import Objects.Variable;
-import Objects.ClassSyntax;
+import Frontend.*;
+
+import Objects.tipoDatos;
+import Objects.metodoObject;
+import Objects.VariableObject;
+import Objects.classObject;
     
     parser code {:
-        private ClassSyntax classFinalSystax ;
-        private ListType typeDate = null;
-        private ListType typeMethods = null;
+
+        private classObject classFinalSystax ;
+        private tipoDatos typeDate = null;
+        private tipoDatos typeMethods = null;
+
+
+        // variables auxiliares
         private Symbol s;
         private String nameClass;
         private String nameVariable;
         private String nameMethods;
-        private List<Method> ListMethods =new ArrayList<>();
-        private List<Variable> ListVariable= new ArrayList<>();
-        private List<Variable> listParameters= new ArrayList<>();
-        private int errorCounter= 0;
 
+        //listas para guardar
+        private List<metodoObject> ListMethods =new ArrayList<>();
+        private List<VariableObject> ListVariable= new ArrayList<>();
+        private List<VariableObject> listParameters= new ArrayList<>();
+
+        //Errores
+        private int cantidadErrores= 0;
+
+    //parser
         parser(Lexico lexico){
             super(lexico);
         }
+
+// errores
         public void syntax_error(Symbol cur_token) {
-            errorCounter++;
-            ServerGui.jTextArea1.append("\n"+errorCounter+" - Clase<"+nameClass+"> en simbolo<" + sym.terminalNames[cur_token.sym]+String.format(">posicion: <%d>, <%d>", (cur_token.left+1), (cur_token.right+1)));
+            cantidadErrores++;
+
+            NewJFrame.jTextArea1.append("\n"+cantidadErrores+" - Clase<"+nameClass+"> en simbolo<" + sym.terminalNames[cur_token.sym]+String.format(">posicion: <%d>, <%d>", (cur_token.left+1), (cur_token.right+1)));
         }
+
+
      
         public Symbol getSymbol(){
             return this.s;
         }
 
+// metodos
        private void addVariable (int aleft,int aright){
-            ListVariable.add(new Variable(typeDate,aright+1,aleft+1,nameVariable));
+            ListVariable.add(new VariableObject(typeDate,aright+1,aleft+1,nameVariable));
             typeDate=null;
             nameVariable = "";
         }
         private void addMethods (int aleft,int aright){
             if(typeMethods ==null){
-                typeMethods = ListType.CONSTRUCTOR;
+                typeMethods = tipoDatos.CONSTRUCTOR;
             }
-            ListMethods.add(new Method(typeMethods, listParameters, (aright+1), (aleft+1), nameMethods));
+            ListMethods.add(new metodoObject(typeMethods, listParameters, (aright+1), (aleft+1), nameMethods));
             listParameters =  new ArrayList<>();
             typeMethods=null;
             nameVariable = "";
         }
         private void addMethodsParameters (int aleft,int aright){
       
-            listParameters.add(new Variable(typeDate,aright+1,aleft+1,nameVariable));
+            listParameters.add(new VariableObject(typeDate,aright+1,aleft+1,nameVariable));
             typeDate=null;
             nameVariable = "";
         }
+
+
         public void arrayType() {
         switch (typeDate) {
-            case BYTE:
-                typeDate = ListType.ARRAYBYTE;
-                break;
-            case SHORT:
-                typeDate = ListType.ARRAYSHORT;
-                break;
+           
             case INT:
-                typeDate = ListType.ARRAYINT;
-                break;
-            case LONG:
-                typeDate = ListType.ARRAYLONG;
-                break;
-            case FLOAT:
-                typeDate = ListType.ARRAYFLOAT;
+                typeDate = tipoDatos.ARRAYINT;
                 break;
             case DOUBLE:
-                typeDate = ListType.ARRAYDOUBLE;
+                typeDate = tipoDatos.ARRAYDOUBLE;
                 break;
             case CHAR:
-                typeDate = ListType.ARRAYCHAR;
+                typeDate = tipoDatos.ARRAYCHAR;
                 break;
             case BOOLEAN:
-                typeDate = ListType.ARRAYBOOLEAN;
+                typeDate = tipoDatos.ARRAYBOOLEAN;
                 break;
             case STRING:
-                typeDate = ListType.ARRAYSTRING;
+                typeDate = tipoDatos.ARRAYSTRING;
                 break;
             case OBJECT:
-                typeDate = ListType.ARRAYOBJECT;
+                typeDate = tipoDatos.ARRAYOBJECT;
                 break;
             default:
                 break;
         }
     }
+
+    //metodos
     public String getNameClass(){
         return this.nameClass;
     }
-        public int getErrorCounter(){
-            return this.errorCounter;
+        public int getcantidadErrores(){
+            return this.cantidadErrores;
         }
-        public List<Variable> getListVariable() {
+        public List<VariableObject> getListVariable() {
         return ListVariable;
         }
-        public List<Method> getListMethods() {
+        public List<metodoObject> getListMethods() {
         return ListMethods;
         }
-        public ClassSyntax getClassSyntax(){
+        public classObject getClassSyntax(){
             return this.classFinalSystax;
         }
-:}
+:};
+// ingreso de  terminales
 
-terminal String BYTE,SHORT,INT,LONG,FLOAT,F,DOUBLE;//num
-terminal String CHAR,CARACTER,CHARTN;//CARACTER
-terminal String BOOLEAN,TRUE,FALSE,ADMIRACION,INTERO;//boolean
+terminal String INT,DOUBLE;
+terminal String CHAR,CARACTER;
+terminal String BOOLEAN,TRUE,FALSE,ADMIRACION,INTERO;
 
-terminal PACKAGE,IMPORT;
+terminal PACKAGE,IMPORT, PUNTO,PUNTO_COMA,SIMPLE_COMILLA,DOBLE_PUNTO,COMA, CLASS,THIS, EXNTENDS,IMPLEMENTS,SUPER, NEW,VOID;
+/*Sentencias*/
 
-terminal PUNTO,PUNTO_COMA,SIMPLE_COMILLA,DOBLE_PUNTO,COMA;//PUNTUACION
-/*************CLASE***************/
-terminal CLASS,THIS;
-terminal EXNTENDS,IMPLEMENTS,SUPER;//HERENCIA
-/*************TODAS PARTES***************/
-terminal NEW,VOID;
-/*TRY CATCH*/
-terminal TRY,CATCH;
-/*SENTENCIAS DE CONTORL*/
-terminal FOR,WHILE,DO,IF,ELSE,SWITCH,CASE,DEFAULT;
-/*FINAL SENTENCIAS DE CONTORL*/ 
-terminal BREAK,RETURN;
-/*VISIBILIDA*/ 
-terminal PRIVATE,PUBLIC,PROTECTED;
-terminal FINAL,STATIC;//USO DE MEMORIA
+terminal FOR,WHILE,DO,IF,ELSE,SWITCH,CASE,DEFAULT,BREAK,RETURN;
+
+/*visibilidad*/ 
+terminal PRIVATE,PUBLIC,PROTECTED,FINAL,STATIC;
 /****************************/
-terminal String DECIMAL,ENTERO,ID,STRING;//TOKEN 
-terminal Stirng TEXT;
+
+terminal String DECIMAL,ENTERO,ID,STRING,TEXT;
+
+//operadores aritmeticos
 terminal SUMA_IGUAL,SUMA,CREMENTO,INCREMENTO,RESTA_IGUAL,RESTA,MULTIPLICACION_IGUAL,MULTIPLICACION,MODULO_IGUAL,DIVISION_IGUAL,DIVISION;//OPERACION
 terminal IGUAL,MODULO;//= 
+
 /*SIMBOLOS OPERADOR RELACIONALES MENOR_Q*/
 terminal TWOO,TWOY,DOUBLE_IGUAL,MENOR_Q_IGUAL,MAYOR_Q_IGUAL,MENOR_Q,MAYOR_Q,ONEY,ONEO,ADMIRACION_IGUAL;
-/**************************AGRUPACION********************************/
-terminal P_APERTURA,P_CIERRE,L_APERTURA,L_CIERRE,C_APERTURA,C_CIERRE;
-/*************************************NO TERMINALES******************************************************/
-non terminal inicio;//INICIO DE TODO
-/*LA PARTE DE package Y import*/
-non terminal encabezado,importacion,p,sp,spp,pc,vfactorizadoStatic,vfactorizadoVC;
-/*LA CLASE*/
-non terminal clase,internoClase,vc,staticCfianl,v,internoClaseFa,ayuda,herencia,secuenciIDHRE;
-/*VARIABLE GLOBAL O asignacionVariable DE LA CALSE*/
-non terminal asignacionVariable,vGlobal,vChar,tDAtosFacto;
-non terminal numFloat,numEntero, numDouble, variableChar, variableBoolean,variableStirng, variableObject;
-non terminal dSeguidoF,tDatos,variableID,objectInst,vGlobalFac,tDatosPrima;
+/*Operadores de agupacion */
+terminal PARENTESISABIERTO,PARENTESISCERRADO,LLAVESABIERTO,LLAVESCERRADO,CORCHETEABIERTO,CORCHETECERRADO;
+
+
+// ingreso de no terminales
+non terminal inicio,inicioSintaxis,importSintaxis,puntoComaSintaxis,sp,sintaxisMayorImportaciones,pc,vfactorizadoStatic,vfactorizadoVC;
+/*LA CLASE   ingresoOpcionesClases */
+non terminal clase,internoClase,visibilidadTerminal,staticFinalSintaxisEspecifica,v,internoClaseFa,ingresoOpcionesClases,herenciaSintaxis,secuenciIDHRE;
+/*VARIABLE GLOBAL O ingresoNuevasVariables DE LA CALSE*/
+non terminal ingresoNuevasVariables,visionEspecificaDeClases,charSintaxis,tDAtosFacto;
+non terminal intTipoDato, DoubleTipoDato, CharTipoDato, BooleanTipoDato,StringTipoDato, ObjectTipoDato;
+non terminal parametrosConsecutivosOBjetos,opcionesDatosIngreso,variableID,objectInst,visualizacionClaseFinal,tDatosPrima;
 /*METODOS*/
-non terminal metodo,pMetodoS,pMetodoSP,soloId,realicarSentenciaControl;
-non terminal onlyIDArray,staticFactori,finalFactori;
-non terminal idDatoFac ,tFact,lCon, idDato,tDatosDespues;
+non terminal metodoSintaxis,pMetodoS,pMetodoSP,soloId,realicarSentenciasControlSintaxisGeneral;
+non terminal onlyIDArray,staticOpcionInclusion,finalOpcionInclusion;
+non terminal idDatoFac ,parametrosSintaxisGeneral,lCon, idDato,tDatosDespues;
 /*LOCAL METODO*/
-non terminal variableLocal,local,localMetodo,lConFact,loclaMetodFacto,terminalAccion,arrayID;
+non terminal variableLocal,local,localMetodo,lConFact,loclaMetodFacto,salidasOpciones,arrayID;
 non terminal variableObjectUsarCrear,variableIDLocal,variableSet,usarOBJECT,variableLocalFinal;
 /*SENTENCIAS DE CONTROLS*/
-non terminal sentenciaControl,usarVariable,usarVariableFacto;
-non terminal variableIDFor,sentenciaFor,inializarVariable,forVariableId,forVariableIdFac;
-non terminal sentenciaElse,sentenciaElseFac,staticImport,factoIDATO;
-non terminal internoSwitch,localSwitch,localSwitchDeclaracion;
-non terminal secuenciDatos,typeVarible,newParentesisOCochtes,typeVaribleSimple,operadorestDatos;
-non terminal serietDatos,tDatosserietDatos,castin,signacionVariableSecuencial,signacionVariableFactori;
-/*************************************PRECEDENCIA******************************************************/
+non terminal SentenciasControlSintaxisGeneral,usarVariable,OperadoresIncrementales;
+non terminal variableIDFor,ForSintaxisGeneral,inializarVariable,forVariableId,forVariableIdFac;
+non terminal sentenciaElse,sentenciaElseFac,staticImport,factoIDATO, operadoresAritmeticos;
+non terminal SwitchSintaxisGeneral,SwitchEspecificoSintaxis,declaracionesSwitch;
+non terminal secuenciDatos,tipoDatosSintaxis,newParentesisOCochtes,typeVaribleSimple,operadoresTipos;
+non terminal serietDatos,tDatosserietDatos,Casting,variablesConsecutivas,variablesConsecutivasFactores, funcionesBooleanas, expresionesEspecificasElementales;
+
+
+
+// formas de precedencia
 precedence left SUMA, RESTA;
 precedence left MULTIPLICACION, DIVISION;
 precedence left MODULO,DIVISION;
+
+
 precedence left DOUBLE_IGUAL,ADMIRACION_IGUAL;
 precedence left MAYOR_Q_IGUAL,MENOR_Q;
 precedence left MENOR_Q_IGUAL,MAYOR_Q;
 precedence left TWOO,ONEO;
 precedence left TWOY,ONEY;
-/*************************************GRAMATICA******************************************************/
+
+// Inicio de las gramaticas -- INGRESO DE CLASE DE FORMA GENERAL
 start with inicio;
-/******INICIO DE TODO *****/
-inicio ::= encabezado clase {:classFinalSystax = new ClassSyntax(nameClass, ListMethods, ListVariable, null);
-;
-/*****PRIMERA PARTE*******/
-encabezado ::= PACKAGE ID pc importacion
-|importacion
-;
-//punto id ; , punto id punto id ;
-pc ::= PUNTO ID pc
-| p
+
+inicio ::= 
+inicioSintaxis clase {:classFinalSystax = new classObject(nameClass, ListMethods, ListVariable, null);:}
 ;
 
-importacion ::= IMPORT staticImport ID sp importacion
+/*
+Inicio de las sentencias
+*/
+inicioSintaxis ::= 
+importSintaxis
+| PACKAGE ID pc importSintaxis
+;
+
+//sintaxis basica de los imports
+importSintaxis ::= 
+    IMPORT staticImport ID sp importSintaxis
 |
 ;
-staticImport ::= STATIC
+
+//SI VIENE MAS PUNTOS EN LA EXPORTACIOn
+pc ::= PUNTO ID pc
+| puntoComaSintaxis
+;
+
+staticImport ::= 
+STATIC
 |
 ;
 // punto id, ; , punto * ; , punto id punto * ;
-sp ::= PUNTO spp
-| p
+
+// fin de sintaxis de ingreso
+sp ::= 
+PUNTO sintaxisMayorImportaciones
+| puntoComaSintaxis
 ;
-spp ::= MULTIPLICACION p
-| ID sp
+
+sintaxisMayorImportaciones ::= 
+  ID sp
+ | MULTIPLICACION puntoComaSintaxis
 ;
-p ::=  PUNTO_COMA
-| error{:
-ServerGui.jTextArea1.append("\n"+errorCounter+" - Clase<"+nameClass+"> en simbolo<" + sym.terminalNames[cur_token.sym]+String.format(">posicion: <%d>, <%d>", (cur_token.left+1), (cur_token.right+1)));
-:}
+
+//ingreso punto coma final sintaxis
+puntoComaSintaxis ::=  
+PUNTO_COMA
+| error{:NewJFrame.jTextArea1.append("\n"+cantidadErrores+"Error en clase: "+nameClass+" lexema:" + sym.terminalNames[cur_token.sym]);:}
 ;
-/*****FINAL PRIMERA PARTE****/
-/*PARTE DE LA CLASE ******************************************************* CLASE CLASE*/
-clase ::= v CLASS ID:a {:nameClass = a.toString();:} herencia L_APERTURA  internoClase  L_CIERRE
+//-------------------------------------------------------------------------------------------
+
+
+/*Ingreso de clases*/
+
+clase ::= 
+v CLASS ID:identificador {:nameClass = identificador.toString();:} herenciaSintaxis LLAVESABIERTO  internoClase  LLAVESCERRADO
 ;
-herencia ::= 
-| EXNTENDS ID secuenciIDHRE herencia
-| IMPLEMENTS ID secuenciIDHRE herencia
+/*sintaxis de herencia */
+herenciaSintaxis ::= 
+     
+| EXNTENDS ID secuenciIDHRE herenciaSintaxis
+| IMPLEMENTS ID secuenciIDHRE herenciaSintaxis
 ;
-secuenciIDHRE ::= PUNTO ID secuenciIDHRE
+//---------------------------------------------
+
+
+
+secuenciIDHRE ::= 
+PUNTO ID secuenciIDHRE
 |
 ;
-/*VISIBILIDAD DE LAS CLASES*/
-// STATIC FINAL, STATIC ,FINAL STATIC ,FINAL ,STATIC FINAL vc, STATIC vc ,FINAL STATIC vc,FINAL  vc
-// vc STATIC FINAL,vc STATIC , vc FINAL STATIC ,vc FINAL
-v ::= staticCfianl vfactorizadoStatic
-| vc vfactorizadoVC
+
+
+//---------------------------------------------
+v ::= 
+    staticFinalSintaxisEspecifica vfactorizadoStatic
+    | visibilidadTerminal vfactorizadoVC
 ;
-vfactorizadoStatic ::= vc
-|
+vfactorizadoStatic ::= 
+    visibilidadTerminal
+    |
 ;
-vfactorizadoVC ::= staticCfianl
-|
+
+vfactorizadoVC ::= 
+    staticFinalSintaxisEspecifica
+    |
 ;
-staticCfianl ::= STATIC staticFactori
-|FINAL finalFactori
+staticFinalSintaxisEspecifica ::=
+    STATIC staticOpcionInclusion
+    |FINAL finalOpcionInclusion
 ;
-//*
-staticFactori ::= FINAL
-|
+//-------------------------------------------------------------*
+
+staticOpcionInclusion ::= 
+    FINAL
+    |
 ;
-finalFactori ::= STATIC
-|
+
+finalOpcionInclusion ::= 
+    STATIC
+    |
 ;
-vc ::= PUBLIC
-| PRIVATE
-| PROTECTED
+
+visibilidadTerminal ::= 
+    PUBLIC
+    | PRIVATE
+    | PROTECTED
 ;
+//-------------------------------------------------------------*
+
+
+
 /*FIANAL VISIBILIDAD DE LAS CLASES*/
-internoClase ::= vGlobal internoClaseFa
-| 
+internoClase ::=
+    visionEspecificaDeClases internoClaseFa
+    | 
 ;
-/*VISIBILIDAD DE LAS VARIALBES DE ATRIBUTOS O METODOS DE UNA CLASE*/
-vGlobal ::= vc vGlobalFac 
-| vGlobalFac
+
+//visualizacion clases--------------------------------------------------------------------
+visualizacionClaseFinal ::=
+    staticFinalSintaxisEspecifica
+    | 
 ;
-vGlobalFac ::= staticCfianl
-| 
+
+visionEspecificaDeClases ::=
+    visibilidadTerminal visualizacionClaseFinal 
+    | visualizacionClaseFinal
 ;
-internoClaseFa ::= variableID ayuda
-|ayuda
+
+
+
+internoClaseFa ::= 
+    variableID ingresoOpcionesClases
+    |ingresoOpcionesClases
 ;
-/*AQUIE SE DIFERENCIA SI ES UNA METODO O ATRIBUTO*/
-ayuda ::= asignacionVariable {:
-            int aleft = ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()).left;
-		    int aright = ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()).right;
-            addVariable(aleft,aright);
-            :} 
-              internoClase 
-| metodo 
- {:
-            int aleft = ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()).left;
-		    int aright = ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()).right;
-            addMethods(aleft,aright);
-            :}
-internoClase
+
+//-------------------------------------------------------------------------------------------
+
+ingresoOpcionesClases ::= 
+    ingresoNuevasVariables
+    {:int izquierda = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+    int derecha = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+    addVariable(izquierda,derecha);:} internoClase 
+
+    | metodoSintaxis 
+    {:int izquierda = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+    int derecha = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+    addMethods(izquierda,derecha);:} internoClase
 ;
-/*****************VARIABLE**************/
-variableID ::= numFloat 
-| numDouble 
-| variableChar 
-| variableBoolean 
-| variableStirng 
-| variableObject 
-| numEntero 
+
+
+//tipos de opciones de datos-------------------------------------------------------------------------
+tipoDatosSintaxis ::= 
+    STRING
+    |INT
+    |ID
+    |DOUBLE
+    |CHAR
+    |BOOLEAN
+    | error{:Frontend.NewJFrame.jTextArea1.append("\n"+cantidadErrores+"  Error en clase: "+nameClass+" lexema:" + sym.terminalNames[cur_token.sym]);:}
 ;
-typeVarible ::= ID
-|FLOAT
-|DOUBLE
-|CHAR
-|BOOLEAN
-|STRING
-|BYTE
-|SHORT
-|INT
-|LONG
-| error{:
-Console.ConsoleText.append("\n"+errorCounter+" - Clase<"+nameClass+"> en simbolo<" + sym.terminalNames[cur_token.sym]+String.format(">posicion: <%d>, <%d>", (cur_token.left+1), (cur_token.right+1)));
-:}
+
+//Sentencias de control (tipos de datos)---------------------------------------------------------------
+
+/*variables
+*/
+variableID ::= 
+ 
+      DoubleTipoDato 
+    | CharTipoDato 
+    | BooleanTipoDato 
+    | StringTipoDato 
+    | ObjectTipoDato 
+    | intTipoDato 
 ;
-numFloat ::= FLOAT {:typeDate = ListType.FLOAT;:} onlyIDArray;
-numDouble ::= DOUBLE {:typeDate = ListType.DOUBLE;:}  onlyIDArray;
-variableChar ::= CHAR {:typeDate = ListType.CHAR;:} onlyIDArray;
-variableBoolean ::=BOOLEAN {:typeDate = ListType.BOOLEAN;:} onlyIDArray;
-variableStirng ::= STRING {:typeDate = ListType.STRING;:} onlyIDArray;
-variableObject ::= ID {:typeDate = ListType.OBJECT;:} onlyIDArray;
-numEntero ::= BYTE {:typeDate = ListType.BYTE;:} onlyIDArray
-| SHORT {:typeDate = ListType.SHORT;:} onlyIDArray
-| INT {:typeDate = ListType.INT;:} onlyIDArray
-| LONG {:typeDate = ListType.LONG;:} onlyIDArray 
+
+
+//sintaxis ESPECIFICA DE TIPOS DE DATOS------------------------------------------------------------
+intTipoDato ::=
+ INT {:typeDate = tipoDatos.INT;:} onlyIDArray
 ;
+
+DoubleTipoDato ::= 
+DOUBLE {:typeDate = tipoDatos.DOUBLE;:}  onlyIDArray
+;
+
+CharTipoDato ::= 
+CHAR {:typeDate = tipoDatos.CHAR;:} onlyIDArray
+;
+BooleanTipoDato ::=
+BOOLEAN {:typeDate = tipoDatos.BOOLEAN;:} onlyIDArray
+;
+
+StringTipoDato ::= 
+STRING {:typeDate = tipoDatos.STRING;:} onlyIDArray
+;
+
+ObjectTipoDato ::= 
+ID {:typeDate = tipoDatos.OBJECT;:} onlyIDArray
+;
+
+
+//----------------------------------------------------------------------------------------------
+
 //arreay [] | ID
-onlyIDArray ::= ID:a arrayID {:nameVariable = a.toString();:}
-| C_APERTURA  C_CIERRE {:arrayType();:} onlyIDArray
+onlyIDArray ::= 
+ID:identificador arrayID {:nameVariable = identificador.toString();:}
+| CORCHETEABIERTO  CORCHETECERRADO {:arrayType();:} onlyIDArray
 ;
-arrayID ::= C_APERTURA C_CIERRE
-|
-;
-/*****************FINAL VARIABLE**************/
-/*****************VARIABLES INDIALIZADAS DE UNA CLASE**************/
-asignacionVariable ::=  IGUAL tDatos signacionVariableSecuencial
-|p
-;
-signacionVariableSecuencial ::= p
-|  COMA ID signacionVariableFactori
-;
-signacionVariableFactori ::= IGUAL tDatos signacionVariableSecuencial
-|  p
-;
-//el uso del ()? tDatos : tDatos | ()? tDatos : ()? tDatos : tDatos
-tDatos ::= tDAtosFacto tDatosPrima
-;
-tDAtosFacto ::= vChar
-|F
-|L_APERTURA lCon
-|NEW typeVarible newParentesisOCochtes
-|FALSE
-|TRUE
-|ENTERO
-|DECIMAL
-|TEXT 
-|usarOBJECT
-|P_APERTURA castin
-|ADMIRACION tDatos
-| error{:
 
-ServerGui.jTextArea1.append("\n"+errorCounter+" - Clase<"+nameClass+"> en simbolo<" + sym.terminalNames[cur_token.sym]+String.format(">posicion: <%d>, <%d>", (cur_token.left+1), (cur_token.right+1)));
-:}
-;
-tDatosPrima ::= operadorestDatos tDatos
+arrayID ::= 
+CORCHETEABIERTO CORCHETECERRADO
 |
 ;
-castin ::=  tDatos P_CIERRE  tDatosDespues
-| typeVaribleSimple P_CIERRE  tDatos
+
+
+/*Ingreso de variables*---------------------------------------------------------------------/*/
+
+
+ingresoNuevasVariables ::= 
+    IGUAL opcionesDatosIngreso variablesConsecutivas
+    | puntoComaSintaxis
 ;
-tDatosDespues ::= operadorestDatos tDatos
-| INTERO tDatos DOBLE_PUNTO tDatos
+
+opcionesDatosIngreso ::= 
+tDAtosFacto tDatosPrima
+;
+
+
+// Asignacion de variables y en caso son consecutivas.
+variablesConsecutivas ::=
+      COMA ID variablesConsecutivasFactores
+    | puntoComaSintaxis
+;
+
+variablesConsecutivasFactores ::= 
+IGUAL opcionesDatosIngreso variablesConsecutivas
+|  puntoComaSintaxis
+;
+
+
+
+
+// Opciones de ingreso de variables
+tDAtosFacto ::= 
+    charSintaxis
+    |LLAVESABIERTO lCon
+    |NEW tipoDatosSintaxis newParentesisOCochtes
+    |funcionesBooleanas
+    |expresionesEspecificasElementales
+    |usarOBJECT
+    |Casting
+    |ADMIRACION opcionesDatosIngreso
+| error{:NewJFrame.jTextArea1.append("\n"+cantidadErrores+"  Error en clase: "+nameClass+" lexema:" + sym.terminalNames[cur_token.sym]);:}
+;
+// FUNCIONES BOOLEANAS------------------------------------------------------------------
+funcionesBooleanas ::= 
+TRUE
+| FALSE
+;
+// EXPRESIONES ELEMENTALES------------------------------------------------------------------
+
+expresionesEspecificasElementales::=
+    ENTERO
+    |DECIMAL
+    |TEXT 
+;
+
+tDatosPrima ::= 
+    operadoresTipos opcionesDatosIngreso
+    |
+;
+//----------casteo de funciones-------------------------------------------------------------------------
+Casting ::=  
+   PARENTESISABIERTO opcionesDatosIngreso PARENTESISCERRADO  tDatosDespues
+    | PARENTESISABIERTO typeVaribleSimple PARENTESISCERRADO  opcionesDatosIngreso
+;
+
+tDatosDespues ::= 
+    operadoresTipos opcionesDatosIngreso
+    | INTERO opcionesDatosIngreso DOBLE_PUNTO opcionesDatosIngreso
+    |
+;
+
+
+
+//TIPOS DE DATOS DE VARIABLES----------------------------------------------------------
+typeVaribleSimple ::= 
+    DOUBLE
+    |STRING
+    |INT
+    |CHAR
+    |BOOLEAN
+;
+
+operadoresTipos ::= 
+    TWOO
+    |TWOY
+    |DOUBLE_IGUAL
+    |MENOR_Q_IGUAL
+    |MAYOR_Q_IGUAL
+    |MENOR_Q
+    |MAYOR_Q
+    |ONEY
+    |ONEO
+    |ADMIRACION_IGUAL
+    |operadoresAritmeticos
+  
+;
+//------------operadores-------------------------------------------------------------------
+operadoresAritmeticos ::= 
+    SUMA
+    |RESTA
+    |MULTIPLICACION
+    |DIVISION
+    |MODULO
+;
+//Sintaxis para varibles char------------------------------------------
+charSintaxis ::= 
+    SIMPLE_COMILLA CARACTER SIMPLE_COMILLA
+;
+
+// ingreso de parentesis 
+newParentesisOCochtes ::= 
+    parametrosSintaxisGeneral
+    | CORCHETEABIERTO tDatosserietDatos CORCHETECERRADO serietDatos
+;
+
+
+tDatosserietDatos ::=
+    opcionesDatosIngreso
+    |
+;
+
+serietDatos ::=
+    LLAVESABIERTO lCon
+    |
+;
+
+//parametros consecuti
+parametrosSintaxisGeneral ::=
+ PARENTESISABIERTO parametrosConsecutivosOBjetos PARENTESISCERRADO 
+| PARENTESISABIERTO PARENTESISCERRADO 
+;
+
+parametrosConsecutivosOBjetos ::=
+ opcionesDatosIngreso objectInst
+;
+
+objectInst ::=
+ COMA parametrosConsecutivosOBjetos
 |
 ;
-typeVaribleSimple ::= FLOAT
-|DOUBLE
-|CHAR
-|BOOLEAN
-|STRING
-|BYTE
-|SHORT
-|INT
-|LONG
-;
-operadorestDatos ::= TWOO
-|TWOY
-|DOUBLE_IGUAL
-|MENOR_Q_IGUAL
-|MAYOR_Q_IGUAL
-|MENOR_Q
-|MAYOR_Q
-|ONEY
-|ONEO
-|ADMIRACION_IGUAL
-|SUMA
-|RESTA
-|MULTIPLICACION
-|DIVISION
-|MODULO
-;
-newParentesisOCochtes ::= P_APERTURA  tFact
-| C_APERTURA tDatosserietDatos C_CIERRE serietDatos
-;
-serietDatos ::= L_APERTURA lCon
-|
-;
-tDatosserietDatos ::= tDatos
-|
-;
-//para los char
-vChar ::= SIMPLE_COMILLA CARACTER SIMPLE_COMILLA
-| CHARTN
-;
-//esto para new id (parametos de objetos)
-tFact ::= dSeguidoF P_CIERRE 
-| P_CIERRE 
-;
-dSeguidoF ::= tDatos objectInst
-;
-objectInst ::= COMA dSeguidoF
-|
-;
+
+
+//ARREGLOS-------- idDato
 // esto para crear arreglos{}
-lCon ::= tDatos lConFact L_CIERRE
-| L_CIERRE
-;
-lConFact ::=  COMA tDatos  lConFact
-|
-;
-//USAR OBJECT
-usarOBJECT ::= ID idDato
-;
-//ARRAY.LETER - 4 ,ID.ID(); //GET
-idDato ::= PUNTO idDatoFac
-|C_APERTURA tDatos C_CIERRE idDato
-|P_APERTURA factoIDATO
-|
-;
-factoIDATO ::= dSeguidoF P_CIERRE
-|P_CIERRE
+lCon ::=
+ opcionesDatosIngreso lConFact LLAVESCERRADO
+| LLAVESCERRADO
 ;
 
-idDatoFac ::= ID  idDato
-;
-/*****************FINAL VARIABLES INDIALIZADAS DE UNA CLASE**************/
-/***********************************METODOS**************/
-metodo ::= {:nameMethods=nameVariable;typeMethods = typeDate;:} P_APERTURA pMetodoS P_CIERRE L_APERTURA  localMetodo  L_CIERRE 
-|VOID {:typeMethods = ListType.VOID;:}  ID:a {:nameMethods = a.toString();:} P_APERTURA pMetodoS P_CIERRE L_APERTURA  localMetodo   L_CIERRE
-|ID:a {:nameMethods = a.toString();:} P_APERTURA pMetodoS P_CIERRE L_APERTURA  localMetodo  L_CIERRE
-;
-//peticiiones de metodos
-pMetodoS ::= variableID {:
-            int aleft = ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()).left;
-		    int aright = ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()).right;
-            addMethodsParameters(aleft,aright);
-            :} pMetodoSP
+lConFact ::=
+  COMA opcionesDatosIngreso  lConFact
 |
 ;
-pMetodoSP ::= COMA pMetodoS
+
+//USAR OBJECT------------------------------------------------------------------------------------
+usarOBJECT ::= 
+    ID idDato
+;
+
+//ARRAY.LETER - 4 ,ID.ID(); //GET
+idDatoFac ::= 
+    ID  idDato
+;
+
+idDato ::= 
+    PUNTO idDatoFac
+    |CORCHETEABIERTO opcionesDatosIngreso CORCHETECERRADO idDato
+    |PARENTESISABIERTO factoIDATO
+    |
+;
+
+factoIDATO ::=
+    parametrosConsecutivosOBjetos PARENTESISCERRADO
+    |PARENTESISCERRADO
+;
+
+
+/**INgreso de metodos------------------------------------------------------------------------**/
+
+metodoSintaxis ::= 
+{:nameMethods=nameVariable;typeMethods = typeDate;:} PARENTESISABIERTO pMetodoS PARENTESISCERRADO LLAVESABIERTO  localMetodo  LLAVESCERRADO 
+|VOID {:typeMethods = tipoDatos.VOID;:}  ID:a {:nameMethods = a.toString();:} PARENTESISABIERTO pMetodoS PARENTESISCERRADO LLAVESABIERTO  localMetodo   LLAVESCERRADO
+|ID:a {:nameMethods = a.toString();:} PARENTESISABIERTO pMetodoS PARENTESISCERRADO LLAVESABIERTO  localMetodo  LLAVESCERRADO
+;
+
+
+//peticiiones de metodos
+pMetodoS ::= 
+variableID {:int aleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+            int aright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+            addMethodsParameters(aleft,aright);:} pMetodoSP
+|
+;
+
+pMetodoSP ::= 
+COMA pMetodoS
 | 
 ;
-/***********************************FINAL METODOS**************/
-/*LO QUE SE PUEDE HACER DENTRO DE UN METODO*/
-localMetodo ::= local  localMetodo
+
+localMetodo ::= 
+local  localMetodo
 |
 ;
-local ::= variableLocal
-|sentenciaControl
-|terminalAccion
+
+local ::= 
+variableLocal
+|SentenciasControlSintaxisGeneral
+|salidasOpciones
 ;
+
 /*VARIALBES LOCALES DENTRO DE UN METODO*/
-variableLocal ::= variableLocalFinal asignacionVariable
+variableLocal ::= 
+    variableLocalFinal ingresoNuevasVariables
 ;
+
 //VARIABLE FINAL 
-variableLocalFinal ::= FINAL variableIDLocal
-|variableIDLocal
-|usarVariable
-|terminalAccion
+variableLocalFinal ::=
+    FINAL variableIDLocal
+    |variableIDLocal    
+    |usarVariable
+    |salidasOpciones
 ;
-variableIDLocal ::= numFloat 
-| numDouble 
-| variableChar 
-| variableBoolean 
-| variableStirng  
-| numEntero 
+
+variableIDLocal ::= 
+    DoubleTipoDato 
+    | CharTipoDato 
+    | BooleanTipoDato 
+    | StringTipoDato  
+    | intTipoDato 
 ;
 
 /*CUALQUIER ACCION menos colocar otra sentencia ya no es*/
-usarVariable ::= ID usarVariableFacto
-|THIS loclaMetodFacto
-|SUPER soloId  P_APERTURA tDatos secuenciDatos P_CIERRE
+usarVariable ::= 
+    ID OperadoresIncrementales
+    |THIS loclaMetodFacto
+    |SUPER soloId  PARENTESISABIERTO opcionesDatosIngreso secuenciDatos PARENTESISCERRADO
 ;
-soloId ::= PUNTO ID soloId
+
+soloId ::=
+ PUNTO ID soloId
 |
 ;
-secuenciDatos ::=  COMA tDatos secuenciDatos
+
+secuenciDatos ::= 
+ COMA opcionesDatosIngreso secuenciDatos
 |
 ;
+
 // id ++ id-- id+= id -=
-usarVariableFacto ::= CREMENTO
-|SUMA_IGUAL tDatos 
-|INCREMENTO
-|RESTA_IGUAL tDatos
-|MULTIPLICACION_IGUAL tDatos
-|DIVISION_IGUAL tDatos
-|MODULO_IGUAL tDatos
-|ID loclaMetodFacto
-|loclaMetodFacto
-|C_APERTURA tDatos C_CIERRE loclaMetodFacto
-|P_APERTURA  factoIDATO
+OperadoresIncrementales ::= 
+    CREMENTO
+    |SUMA_IGUAL opcionesDatosIngreso 
+    |INCREMENTO
+    |RESTA_IGUAL opcionesDatosIngreso
+    |MULTIPLICACION_IGUAL opcionesDatosIngreso
+    |DIVISION_IGUAL opcionesDatosIngreso
+    |MODULO_IGUAL opcionesDatosIngreso
+    |ID loclaMetodFacto
+    |loclaMetodFacto
+    |CORCHETEABIERTO opcionesDatosIngreso CORCHETECERRADO loclaMetodFacto
+    |PARENTESISABIERTO  factoIDATO
 ;
 //asignar al set
-loclaMetodFacto ::= PUNTO  ID  variableObjectUsarCrear 
-|
+loclaMetodFacto ::= 
+    PUNTO  ID  variableObjectUsarCrear 
+    |
 ;
-variableObjectUsarCrear ::= P_APERTURA variableSet
-|loclaMetodFacto
-;
-variableSet ::= tDatos secuenciDatos P_CIERRE 
-|P_CIERRE
-;
-terminalAccion ::= RETURN tDatos p
-|BREAK p
-;
-/*VARIALBES LOCALES DENTRO DE UN METODO*/
-/*SENTENCIAS DE CONTROL*/
-sentenciaControl ::= WHILE P_APERTURA tDatos P_CIERRE realicarSentenciaControl
-|DO realicarSentenciaControl WHILE P_APERTURA tDatos P_CIERRE p
-|IF P_APERTURA tDatos P_CIERRE realicarSentenciaControl sentenciaElse
-|SWITCH P_APERTURA tDatos P_CIERRE L_APERTURA internoSwitch L_CIERRE
-|FOR P_APERTURA inializarVariable  sentenciaFor
-;
-realicarSentenciaControl ::= L_APERTURA localMetodo L_CIERRE ;
 
-//sentencia try ca
-//sentencia de switch
-internoSwitch ::= CASE dSeguidoF  DOBLE_PUNTO localSwitch internoSwitch
-|DEFAULT DOBLE_PUNTO localSwitch  
-|
+variableObjectUsarCrear ::= 
+    PARENTESISABIERTO variableSet
+    |loclaMetodFacto
 ;
-localSwitch ::= localSwitchDeclaracion  localSwitch 
-|terminalAccion //esto de ultimo si o si
+
+variableSet ::= 
+    opcionesDatosIngreso secuenciDatos PARENTESISCERRADO 
+    |PARENTESISCERRADO
 ;
-localSwitchDeclaracion ::= variableLocal 
-|sentenciaControl 
+
+
+
+// sintaxis de operadores de salida 
+salidasOpciones ::= 
+    BREAK puntoComaSintaxis
+    |RETURN opcionesDatosIngreso puntoComaSintaxis
 ;
+/*sentencias de control
+----------------------------------------------------------------------------------------------
+*/
+SentenciasControlSintaxisGeneral ::= 
+WHILE PARENTESISABIERTO opcionesDatosIngreso PARENTESISCERRADO realicarSentenciasControlSintaxisGeneral
+|DO realicarSentenciasControlSintaxisGeneral WHILE PARENTESISABIERTO opcionesDatosIngreso PARENTESISCERRADO puntoComaSintaxis
+|IF PARENTESISABIERTO opcionesDatosIngreso PARENTESISCERRADO realicarSentenciasControlSintaxisGeneral sentenciaElse
+|SWITCH PARENTESISABIERTO opcionesDatosIngreso PARENTESISCERRADO LLAVESABIERTO SwitchSintaxisGeneral LLAVESCERRADO
+|FOR PARENTESISABIERTO inializarVariable  ForSintaxisGeneral
+;
+
+
+realicarSentenciasControlSintaxisGeneral ::= 
+LLAVESABIERTO localMetodo LLAVESCERRADO 
+;
+
+// SINTAXIS DE SWITCH-----------------------------------------------------------------
+SwitchSintaxisGeneral ::= 
+        CASE parametrosConsecutivosOBjetos  DOBLE_PUNTO SwitchEspecificoSintaxis SwitchSintaxisGeneral
+    |   DEFAULT DOBLE_PUNTO SwitchEspecificoSintaxis  
+    |
+;
+
+SwitchEspecificoSintaxis ::= 
+    declaracionesSwitch SwitchEspecificoSintaxis 
+    |salidasOpciones
+;
+
+declaracionesSwitch ::= 
+    variableLocal 
+    |SentenciasControlSintaxisGeneral 
+;
+//-------------------------------------------------------------------------------------------
 //sentencia de for
-sentenciaFor ::=  P_CIERRE realicarSentenciaControl
-| tDatos p usarVariable  P_CIERRE realicarSentenciaControl
+ForSintaxisGeneral ::= 
+ PARENTESISCERRADO realicarSentenciasControlSintaxisGeneral
+| opcionesDatosIngreso puntoComaSintaxis usarVariable  PARENTESISCERRADO realicarSentenciasControlSintaxisGeneral
 ;
-inializarVariable ::= variableIDFor asignacionVariable
+
+inializarVariable ::= 
+variableIDFor ingresoNuevasVariables
 | ID forVariableId
 ;  
-variableIDFor ::= numFloat 
-| numDouble 
-| variableChar 
-| variableBoolean 
-| variableStirng 
-| numEntero 
-| error{:
-ServerGui.jTextArea1.append("\n"+errorCounter+" - Clase<"+nameClass+"> en simbolo<" + sym.terminalNames[cur_token.sym]+String.format(">posicion: <%d>, <%d>", (cur_token.left+1), (cur_token.right+1)));
-:}
+
+variableIDFor ::=
+  
+ DoubleTipoDato 
+| CharTipoDato 
+| BooleanTipoDato 
+| StringTipoDato 
+| intTipoDato 
+| error{:NewJFrame.jTextArea1.append("\n"+cantidadErrores+"  Error en clase: "+nameClass+" lexema:" + sym.terminalNames[cur_token.sym]);:}
 ;
-forVariableId ::= ID forVariableIdFac
-| C_APERTURA C_CIERRE forVariableId
+
+forVariableId ::= 
+ID forVariableIdFac
+| CORCHETEABIERTO CORCHETECERRADO forVariableId
 ;
-forVariableIdFac ::= DOBLE_PUNTO ID
-| asignacionVariable
+
+forVariableIdFac ::=
+ DOBLE_PUNTO ID
+| ingresoNuevasVariables
 ;
-//USO DE IF ELSE IF ELSE
-sentenciaElse ::= ELSE  sentenciaElseFac
+
+//Sintaxis IF Y ELSE
+sentenciaElse ::=
+ ELSE  sentenciaElseFac
 |
 ;
-sentenciaElseFac ::= L_APERTURA localMetodo L_CIERRE
-|IF P_APERTURA tDatos P_CIERRE L_APERTURA localMetodo L_CIERRE sentenciaElse
-| error {:
-ServerGui.jTextArea1.append("\n"+errorCounter+" - Clase<"+nameClass+"> en simbolo<" + sym.terminalNames[cur_token.sym]+String.format(">posicion: <%d>, <%d>", (cur_token.left+1), (cur_token.right+1)));
-:}
+
+
+sentenciaElseFac ::= LLAVESABIERTO localMetodo LLAVESCERRADO
+|IF PARENTESISABIERTO opcionesDatosIngreso PARENTESISCERRADO LLAVESABIERTO localMetodo LLAVESCERRADO sentenciaElse
+| error {:NewJFrame.jTextArea1.append("\n"+cantidadErrores+"  Error en clase: "+nameClass+" lexema:" + sym.terminalNames[cur_token.sym]);:}
 ;

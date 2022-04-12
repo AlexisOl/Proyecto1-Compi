@@ -4,6 +4,7 @@
  */
 package Comparar;
 
+import Frontend.NewJFrame;
 import Helper.HelperVariable;
 import JSON.jsonObject;
 import Objects.classObject;
@@ -30,7 +31,7 @@ public class comparacion extends Thread {
     private int numComments = 0;
     private int numMethods = 0;
     private int numClass = 0;
-    
+
     
 
     
@@ -56,8 +57,7 @@ public class comparacion extends Thread {
                 Thread.sleep(500);
             } while (this.isAlive());
         } catch (Exception e) {
-            System.out.println("Error");
-            Frontend.ServerGui.jTextArea1.append("Error");
+            Frontend.NewJFrame.jTextArea1.append("ERROR");
         }
         score = calculoScore(generarJson.getListComments().size(), this.numComments) + calculoScore(generarJson.getListMethods().size(), this.numMethods)
                 + calculoScore(generarJson.getListNameClass().size(), this.numClass)+ calculoScore(generarJson.getListVariable().size(), this.numVariable);
