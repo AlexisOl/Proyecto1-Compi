@@ -50,7 +50,6 @@ public class comparacion extends Thread {
     //GENERACION JSON
     public jsonObject comparacionAnalisis() {
         this.start();
-        AnalizadorMetodos();
         analizarVariable();
         try {
             do {
@@ -65,58 +64,12 @@ public class comparacion extends Thread {
         return generarJson;
     }
 
-    // analizador de metodos
-    private void AnalizadorMetodos() {
-        for (classObject clase1 : Archivo2) {
-            for (classObject classSyntaxComparar : Archivo1) {
-                for (metodoObject methodOne : clase1.getListMethods()) {
-                    for (metodoObject methodTWO : classSyntaxComparar.getListMethods()) {
-                        if (metodosIguales(methodOne, methodTWO)) {
-                            generarJson.getListMethods().add(methodOne);
-                            methodTWO.setFlag(true);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     
-    
-    //metodos iguales
-    private boolean metodosIguales(metodoObject methodOne, metodoObject methodTWO) {
-        if (!methodTWO.isFlag()) {
-            if (analizarNombreClase(methodOne.getLexema(), methodTWO.getLexema())
-                    && ParametrosEquivalentes(methodOne.getListParameters(), methodTWO.getListParameters())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    // n
-    private boolean ParametrosEquivalentes(List<VariableObject> listParametersOne, List<VariableObject> listParametersTwo) {
-        int i = (listParametersOne.size() > listParametersTwo.size()) ? listParametersTwo.size()
-                : listParametersOne.size();
-        int conter = 0;
-        if (i == 0) {
-            return listParametersOne.size() == listParametersTwo.size();
-        }
-        for (int j = 0; j < i; j++) {
-            if (repeticionVariables(listParametersOne.get(j), listParametersTwo.get(j))) {
-                conter++;
-            }
-        }
-        return conter == i;
-    }
 
     private void analizarVariable() {
         for (classObject classSyntax : Archivo2) {
             for (classObject classSyntaxComparar : Archivo1) {
                 for (VariableObject variable : classSyntax.getListVariable()) {
-
-
-// variables de clase
                     for (VariableObject variableTWO : classSyntaxComparar.getListVariable()) {
                         if (repeticionVariables(variable, variableTWO)) {
                             generarJson.getListVariable().add(new HelperVariable(variable, classSyntax.getName(),
@@ -134,31 +87,7 @@ public class comparacion extends Thread {
                         }
                     }
                 }
-                for (metodoObject methodClassOne : classSyntax.getListMethods()) {
-                    //parametros de clases
-                    
-                    
-                    for (VariableObject variable : methodClassOne.getListParameters()) {
-                        for (VariableObject variableTWO : classSyntaxComparar.getListVariable()) {
-                            if (repeticionVariables(variable, variableTWO)) {
-                                generarJson.getListVariable()
-                                        .add(new HelperVariable(variable, methodClassOne.getLexema(),
-                                                classSyntaxComparar.getName()));
-                                variableTWO.setBandera(true);
-                            }
-                        }
-
-                        for (metodoObject method : classSyntaxComparar.getListMethods()) {
-                            for (VariableObject variableTWO : method.getListParameters()) {
-                                if (repeticionVariables(variable, variableTWO)) {
-                                    generarJson.getListVariable().add(new HelperVariable(variable, method.getLexema(),
-                                                    classSyntaxComparar.getName()));
-                                    variableTWO.setBandera(true);
-                                }
-                            }
-                        }
-                    }
-                }
+            
             }
         }
     }
@@ -192,7 +121,7 @@ public class comparacion extends Thread {
 
     // ANALYZE COMMENTS AND NAME CLASS//n3
     private void comentarioClaseAnalisis() {
-        for (classObject classSyntax : Archivo2) {// n
+        for (classObject classSyntax : Archivo2) {
             for (classObject classSyntaxComparar : Archivo1) {// n2
                 // analyzer class
                 AnalizarClase(classSyntax, classSyntaxComparar);// n3

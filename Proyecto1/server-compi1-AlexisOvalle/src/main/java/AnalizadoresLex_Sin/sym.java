@@ -10,73 +10,73 @@ public class sym {
   /* terminals */
   public static final int CREMENTO = 47;
   public static final int ONEO = 62;
-  public static final int DOBLE_PUNTO = 16;
+  public static final int DOBLE_PUNTO = 21;
   public static final int CHAR = 4;
-  public static final int EXNTENDS = 20;
-  public static final int ENTERO = 41;
+  public static final int EXNTENDS = 25;
+  public static final int ENTERO = 12;
   public static final int LLAVESABIERTO = 66;
-  public static final int CASE = 31;
+  public static final int CASE = 36;
   public static final int MAYOR_Q_IGUAL = 58;
   public static final int RESTA = 50;
   public static final int DOUBLE = 3;
-  public static final int PRIVATE = 35;
+  public static final int PRIVATE = 40;
   public static final int INT = 2;
   public static final int INTERO = 10;
-  public static final int FOR = 25;
-  public static final int STATIC = 39;
+  public static final int FOR = 30;
+  public static final int STATIC = 44;
   public static final int AND = 55;
-  public static final int SIMPLE_COMILLA = 15;
+  public static final int SIMPLE_COMILLA = 20;
   public static final int IGUAL = 53;
   public static final int PARENTESISCERRADO = 65;
   public static final int CARACTER = 5;
   public static final int OR = 54;
   public static final int DOUBLE_IGUAL = 56;
-  public static final int CLASS = 18;
+  public static final int CLASS = 23;
   public static final int INCREMENTO = 48;
   public static final int SUMA = 46;
-  public static final int IF = 28;
+  public static final int IF = 33;
   public static final int MAYOR_Q = 60;
-  public static final int THIS = 19;
-  public static final int ID = 42;
-  public static final int PUNTO_COMA = 14;
-  public static final int DECIMAL = 40;
+  public static final int THIS = 24;
+  public static final int PUNTO_COMA = 19;
+  public static final int ID = 13;
   public static final int EOF = 0;
   public static final int BOOLEAN = 6;
-  public static final int RETURN = 34;
+  public static final int DECIMAL = 11;
+  public static final int RETURN = 39;
   public static final int MENOR_Q_IGUAL = 57;
   public static final int MENOR_Q = 59;
   public static final int TRUE = 7;
-  public static final int SUPER = 22;
-  public static final int NEW = 23;
+  public static final int SUPER = 27;
+  public static final int NEW = 28;
   public static final int error = 1;
-  public static final int COMA = 17;
+  public static final int COMA = 22;
   public static final int CORCHETECERRADO = 69;
   public static final int RESTA_IGUAL = 49;
-  public static final int BREAK = 33;
-  public static final int VOID = 24;
+  public static final int BREAK = 38;
+  public static final int VOID = 29;
+  public static final int SWITCH = 35;
   public static final int ADMIRACION = 9;
-  public static final int SWITCH = 30;
-  public static final int IMPORT = 12;
+  public static final int IMPORT = 17;
   public static final int ADMIRACION_IGUAL = 63;
-  public static final int ELSE = 29;
-  public static final int PROTECTED = 37;
-  public static final int PUNTO = 13;
+  public static final int ELSE = 34;
+  public static final int PROTECTED = 42;
+  public static final int PUNTO = 18;
   public static final int PARENTESISABIERTO = 64;
-  public static final int PACKAGE = 11;
-  public static final int FINAL = 38;
-  public static final int WHILE = 26;
+  public static final int PACKAGE = 16;
+  public static final int FINAL = 43;
+  public static final int WHILE = 31;
   public static final int LLAVESCERRADO = 67;
-  public static final int DEFAULT = 32;
-  public static final int PUBLIC = 36;
-  public static final int STRING = 43;
-  public static final int TEXT = 44;
+  public static final int DEFAULT = 37;
+  public static final int PUBLIC = 41;
+  public static final int STRING = 14;
+  public static final int TEXT = 15;
   public static final int FALSE = 8;
   public static final int DIVISION = 52;
   public static final int ONEY = 61;
-  public static final int IMPLEMENTS = 21;
+  public static final int IMPLEMENTS = 26;
   public static final int CORCHETEABIERTO = 68;
   public static final int SUMA_IGUAL = 45;
-  public static final int DO = 27;
+  public static final int DO = 32;
   public static final int MULTIPLICACION = 51;
   public static final String[] terminalNames = new String[] {
   "EOF",
@@ -90,6 +90,11 @@ public class sym {
   "FALSE",
   "ADMIRACION",
   "INTERO",
+  "DECIMAL",
+  "ENTERO",
+  "ID",
+  "STRING",
+  "TEXT",
   "PACKAGE",
   "IMPORT",
   "PUNTO",
@@ -119,11 +124,6 @@ public class sym {
   "PROTECTED",
   "FINAL",
   "STATIC",
-  "DECIMAL",
-  "ENTERO",
-  "ID",
-  "STRING",
-  "TEXT",
   "SUMA_IGUAL",
   "SUMA",
   "CREMENTO",
