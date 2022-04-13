@@ -144,8 +144,6 @@ public class ProyectosComparaciones extends javax.swing.JFrame {
         } else if (JOptionPane.showConfirmDialog(null, "analizr","analizar", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) == 0) {
             ArrayList<String> proyectOne = (new AnalsisDirectorios(new File(this.fileProyectOne))).converterProyect();
             ArrayList<String> proyectTwo = (new AnalsisDirectorios(new File(this.fileProyectTwo))).converterProyect();
-            String json = (new comparacionProyectos(NewMain.PORT, proyectOne, proyectTwo,jButtonViewResults)).JSonResults();
-            System.out.println(json);
         }
     }//GEN-LAST:event_botonCompararActionPerformed
 

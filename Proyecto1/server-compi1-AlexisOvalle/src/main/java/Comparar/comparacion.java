@@ -9,7 +9,6 @@ import Helper.HelperVariable;
 import JSON.jsonObject;
 import Objects.classObject;
 import Objects.metodoObject;
-import Objects.Token;
 import Objects.VariableObject;
 import java.util.ArrayList;
 import java.util.List;
@@ -71,11 +70,6 @@ public class comparacion extends Thread {
             for (classObject classSyntaxComparar : Archivo1) {
                 for (VariableObject variable : classSyntax.getListVariable()) {
                     for (VariableObject variableTWO : classSyntaxComparar.getListVariable()) {
-                        if (repeticionVariables(variable, variableTWO)) {
-                            generarJson.getListVariable().add(new HelperVariable(variable, classSyntax.getName(),
-                                    classSyntaxComparar.getName()));
-                            variableTWO.setBandera(true);
-                        }
                     }
                    
              
@@ -84,23 +78,6 @@ public class comparacion extends Thread {
             }
         }
     }
-
-
-
-
-
-    
-
-    private boolean repeticionVariables(VariableObject variable, VariableObject variableTWO) {
-        if (!variableTWO.isBandera()) {
-            return (variable.getLexema().equals(variableTWO.getLexema()))
-                    && (variable.getType() == variableTWO.getType());
-        } else {
-            return false;
-        }
-    }
-
-
 
 // calculos
     private double calculoScore(double repetido, double suma) {

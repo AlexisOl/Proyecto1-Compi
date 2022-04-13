@@ -42,25 +42,5 @@ public class comparacionProyectos {
         this.proyectTwo = proyectTwo;
     }
     
-    
-    public String JSonResults() {
-        String result = "";
-        try {
-            Socket socket = new Socket("localhost", port);
-            ObjectOutputStream send = new ObjectOutputStream(socket.getOutputStream());
-            ObjectInputStream in2 = new ObjectInputStream(socket.getInputStream());
-            ArrayList<ArrayList> list = new ArrayList<>();
-            list.add(proyectOne);
-            list.add(proyectTwo);
-            send.writeObject(list);
-            String resivido = (String) in2.readObject();
-            result = resivido;
-            send.close();
-            in2.close();
-        } catch (Exception e) {
-            System.out.println("ERROR");
-        }
-        button.setEnabled(true);
-        return result;
-    }
+   
 }
