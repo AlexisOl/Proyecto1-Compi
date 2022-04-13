@@ -8,21 +8,21 @@ import java.util.List;
  */
 
 public class metodoObject extends Token {
-    private tipoDatos type;
+    private String type;
     private List<VariableObject> listParameters;
     private boolean flag = false;
 
-    public metodoObject( tipoDatos type, List<VariableObject> listParameters, int x, int y, String lexeme) {
+    public metodoObject( String type, List<VariableObject> listParameters, int x, int y, String lexeme) {
         super(x, y, lexeme);
         this.type = type;
         this.listParameters = listParameters;
     }
 
-    public tipoDatos getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(tipoDatos type) {
+    public void setType(String type) {
         this.type = type;
     }
 

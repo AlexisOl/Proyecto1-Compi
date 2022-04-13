@@ -7,19 +7,19 @@ package Objects;
 
 public class VariableObject extends Token {
 
-    private tipoDatos type;
+    private String type;
     private boolean bandera = false;
 
-    public VariableObject(tipoDatos type, int x, int y, String lexeme) {
+    public VariableObject(String type, int x, int y, String lexeme) {
         super(x, y, lexeme);
         this.type = type;
     }
 
-    public tipoDatos getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(tipoDatos type) {
+    public void setType(String type) {
         this.type = type;
     }
 
