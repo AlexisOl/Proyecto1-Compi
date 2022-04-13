@@ -4,8 +4,6 @@
  */
 package Comparar;
 
-import Frontend.NewJFrame;
-import Helper.HelperVariable;
 import Objects.classObject;
 import Objects.metodoObject;
 import Objects.VariableObject;
