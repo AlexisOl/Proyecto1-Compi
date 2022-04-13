@@ -8,8 +8,6 @@ import Analizador.AnalizadorBase;
 import Analizador.AnalizadorEstructura;
 import Comparar.comparacion;
 import Frontend.NewJFrame;
-import JSON.convertidorJson;
-import JSON.jsonObject;
 import Objects.classObject;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -53,9 +51,6 @@ public class Conexion extends Thread {
         ArrayList<classObject> poryectOneFinal = archivo1.getProyect();
 
         if (AnalizadorBase.errorCounter == 0) {
-            comparacion analyzer = new comparacion(poryectOneFinal, poryectTwoFinal);
-            jsonObject result = analyzer.comparacionAnalisis();
-            returnString = new convertidorJson().converterJson(result);
         } else {
                       Frontend.NewJFrame.jTextArea1.append("ERROR");
 

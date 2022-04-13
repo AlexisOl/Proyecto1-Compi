@@ -6,7 +6,6 @@ package Comparar;
 
 import Frontend.NewJFrame;
 import Helper.HelperVariable;
-import JSON.jsonObject;
 import Objects.classObject;
 import Objects.metodoObject;
 import Objects.VariableObject;
@@ -34,8 +33,6 @@ public class comparacion extends Thread {
     
 
     
-    // jsonss
-    private jsonObject generarJson = new jsonObject();
 
     
     //CONSTRUCTOR DE CLASE
@@ -43,27 +40,6 @@ public class comparacion extends Thread {
         this.Archivo1 = poryectTwo;
         this.Archivo2 = poryectOne;
     }
-
-    
-    
-    //GENERACION JSON
-    public jsonObject comparacionAnalisis() {
-        this.start();
-        analizarVariable();
-        try {
-            do {
-                Thread.sleep(500);
-            } while (this.isAlive());
-        } catch (Exception e) {
-            Frontend.NewJFrame.jTextArea1.append("ERROR");
-        }
-        score = calculoScore(generarJson.getListComments().size(), this.numComments) + calculoScore(generarJson.getListMethods().size(), this.numMethods)
-                + calculoScore(generarJson.getListNameClass().size(), this.numClass)+ calculoScore(generarJson.getListVariable().size(), this.numVariable);
-        generarJson.setScore(score);
-        return generarJson;
-    }
-
-    
 
     private void analizarVariable() {
         for (classObject classSyntax : Archivo2) {
